@@ -1,0 +1,467 @@
+application:
+  title: FitStorm
+  theme: bootswatch-paper
+#  on_user_created_code: "Workouts.insert({ name: 'Chuck Norris', email: 'internet@chucknorris.com', ownerId: user._id });"
+  collections:
+    - name: songs
+    # Placeholder for songs?
+      type: file_collection
+      storage_adapters:
+        - gridfs
+    - name: workouts
+      fields:
+        - name: name
+          title: Name
+          required: true
+          exportable: false
+        - name: note
+          title: Note
+          input: textarea
+          exportable: false
+          show_in_dataview: false
+        - name: workoutDuration
+          title: Duration
+          type: float
+          show_in_insert_form: false
+          show_in_update_form: false
+          exportable: false
+        - name: publish
+          title: Publish
+          type: bool
+          input: checkbox
+          display_helper: booleanToYesNo
+      owner_field: ownerId
+      roles_allowed_to_read: []
+      roles_allowed_to_update:
+        - owner
+      roles_allowed_to_delete:
+        - owner
+    - name: sets
+      fields:
+        - name: setName
+          title: Set Name
+        #   default: '{{nextSetNumber}}'
+          required: true
+          exportable: false
+        # - name: workoutId
+        #   title: Workout
+        #   required: true
+        #   input: select
+        #   lookup_query_name: workout_list
+        #   lookup_field: name
+        #   lookup_key: _id
+        #   show_in_dataview: false
+        #   show_in_read_only_form: false
+        #   exportable: false
+        #   join_collection: workouts
+        #   join_fields:
+        #     - name
+        #   join_container: workout
+        # - name: workout.name
+        #   title: Workout
+        #   show_in_insert_form: false
+        #   show_in_update_form: false
+        #   exportable: true
+        - name: setDuration
+          title: Duration
+          type: float
+          show_in_insert_form: false
+          show_in_update_form: false
+          exportable: false
+        - name: type
+          title: Type
+        #   type: float
+        #   show_in_insert_form: false
+        #   show_in_update_form: false
+          exportable: false
+        - name: publish
+          title: Publish
+          type: bool
+          input: checkbox
+          display_helper: booleanToYesNo
+        - name: songId
+          title: Song (mp3 only)
+          input: file
+          file_collection: songs
+          file_container: file
+      owner_field: ownerId
+      roles_allowed_to_read:
+        - owner
+      roles_allowed_to_update:
+        - owner
+      roles_allowed_to_delete:
+        - owner
+      before_insert_code: 'if(!doc.setDuration) doc.setDuration = 0;'
+    - name: set_exercises
+      fields:
+        - name: exercise
+          title: Exercise
+          required: true
+          exportable: false
+          input: select
+          input_items:
+            - Push-up
+            - Crunch
+            - Rest
+            - Squat
+            - Cluster Squat
+            - Burpee
+            - Jump Squat
+            - Sit-up
+        - name: duration
+          title: Duration (secs)
+          type: float
+          default: 30
+          required: true
+          exportable: false
+      owner_field: ownerId
+      roles_allowed_to_read: []
+      roles_allowed_to_update:
+        - owner
+      roles_allowed_to_delete:
+        - owner
+    # This collection will be for the master exercise list.  Currently implemented as a dropdown
+    # - name: exercises
+    #   fields:
+    #     - name: exercise
+    #       title: Exercise
+    #       required: true
+    #       exportable: true
+    #     - name: duration
+    #       title: Duration (secs)
+    #       type: float
+    #       default: 1
+    #       required: true
+    #       exportable: true
+    #   owner_field: ownerId
+    #   roles_allowed_to_read: []
+    #   roles_allowed_to_update:
+    #     - owner
+    #   roles_allowed_to_delete:
+    #     - owner
+  queries:
+    - name: workout_list
+      collection: workouts
+      filter: {}
+      options:
+        transform: 'function(doc) { var sum = 0; Sets.find({ workoutId: doc._id }).map(function(item) { if(item.totalDuration) sum += item.totalDuration; }); doc.totalDuration = sum; return doc; }'
+        sort:
+          - name
+      related_queries:
+        - name: set_list
+    - name: workouts_empty
+      collection: workouts
+      filter:
+        _id: null
+      find_one: true
+    - name: workout_details
+      collection: workouts
+      find_one: true
+      filter:
+        _id: ':workoutId'
+      options:
+        transform: 'function(doc) { var sum = 0; Sets.find({ workoutId: doc._id }).map(function(item) { sum += item.totalDuration; }); doc.totalDuration = sum; return doc; }'
+      related_queries:
+        - name: set_list
+    - name: set_list
+      collection: sets
+      filter: {}
+      options:
+        sort:
+          - - setName
+            - desc
+    - name: sets_empty
+      collection: sets
+      filter:
+        _id: null
+      options: {}
+      find_one: true
+      related_queries:
+        - name: set_list
+    - name: set_details
+      collection: sets
+      filter:
+        _id: ':setId'
+      find_one: true
+      options:
+        transform: 'function(doc) { var sum = 0; Sets.find({ setId: doc._id }).map(function(item) { sum += item.setDuration; }); doc.setDuration = sum; return doc; }'
+    - name: set_exercises
+      collection: set_exercises
+      filter:
+        setId: ':setId'
+    - name: exercises_empty
+      collection: set_exercises
+      filter:
+        _id: null
+      find_one: true
+    - name: set_item
+      collection: set_exercises
+      filter:
+        _id: ':itemId'
+      find_one: true
+    - name: current_user_data
+      collection: users
+      filter:
+        _id: Meteor.userId()
+      find_one: true
+  public_zone:
+    pages:
+      - name: home_public
+        title: ''
+        components:
+          - name: home_jumbotron
+            title: FitStorm
+            type: jumbotron
+            # text: '<b>This <a href="https://www.meteor.com" target="_blank">Meteor</a> application is made with <a href="http://www.meteorkitchen.com" target="_blank">meteor-kitchen</a> without manual coding.</b><br />It shows how to work with DataViews, Forms with dates and lookup fields, master-detail relations etc.<br />Source code (input file for generator) is <a href="https://github.com/perak/kitchen-examples/tree/master/example-sets" target="_blank">here</a>.'
+            button_title: 'Login &raquo;'
+            button_route: login
+      - name: login
+        template: login
+      - name: register
+        template: register
+      - name: forgot_password
+        template: forgot_password
+      - name: reset_password
+        template: reset_password
+        route_params:
+          - resetPasswordToken
+    components:
+      - name: left_menu
+        type: menu
+        class: nav navbar-nav
+        dest_selector: '#menu'
+        items:
+          - title: Home
+            route: home_public
+      - name: right_menu
+        type: menu
+        class: nav navbar-nav navbar-right
+        dest_selector: '#menu'
+        items:
+          - title: Register
+            route: register
+          - title: Login
+            route: login
+  private_zone:
+    pages:
+      - name: home_private
+        title: 'Welcome {{userFullName}}!'
+        text: This is FitStorm an app for you to create and search workouts.
+      - name: workouts
+        components:
+          - name: view
+            type: data_view
+            title: Workouts
+            text_if_empty: 'No workouts :('
+            query_name: workout_list
+            insert_route: workouts.insert
+            edit_route: workouts.edit
+            edit_route_params:
+              - name: workoutId
+                value: this._id
+            details_route: workouts.details
+            details_route_params:
+              - name: workoutId
+                value: this._id
+        pages:
+          - name: insert
+            components:
+              - name: insert_form
+                type: form
+                mode: insert
+                title: New workout
+                query_name: workouts_empty
+                submit_route: workouts
+                cancel_route: workouts
+          - name: details
+            route_params:
+              - workoutId
+            components:
+              - name: details_form
+                type: form
+                mode: read_only
+                title: Details
+                query_name: workout_details
+                close_route: workouts
+                back_route: workouts
+          - name: edit
+            route_params:
+              - workoutId
+            components:
+              - name: edit_form
+                type: form
+                mode: update
+                title: Edit workout
+                submit_route: workouts
+                cancel_route: workouts
+                query_name: workout_details
+      - name: sets
+        components:
+          - name: view
+            type: data_view
+            title: Sets
+            text_if_empty: 'No sets :('
+            query_name: set_list
+            insert_route: sets.insert
+            edit_route: sets.edit
+            edit_route_params:
+              - name: setId
+                value: this._id
+            details_route: sets.details
+            details_route_params:
+              - name: setId
+                value: this._id
+        pages:
+          - name: insert
+            components:
+              - name: insert_form
+                type: form
+                mode: insert
+                title: New set
+                query_name: sets_empty
+                # helpers_code: "'nextSetNumber': function() { var max = 0; var setNumbers = Sets.find({}, { fields: { setNumber: 1 }}).fetch(); _.each(setNumbers, function(doc) { var intNum = parseInt(doc.setNumber); if(!isNaN(intNum) && intNum > max) max = intNum; }); return max + 1; }"
+                submit_route: sets.details
+                submit_route_params:
+                  - name: setId
+                    value: newId
+                cancel_route: sets
+          - name: details
+            template: page_subcontent_tabnav
+            route_params:
+              - setId
+            components:
+              - name: details_form
+                type: form
+                mode: read_only
+                title: '{{set_details.setName}}'
+                layout: horizontal
+                query_name: set_details
+                back_route: sets
+            force_yield_subpages: true
+            pages:
+              - name: items
+                components:
+                  - name: view
+                    type: data_view
+                    text_if_empty: No items
+                    query_name: set_exercises
+                    insert_button_title: Add exercise
+                    insert_route: sets.details.insert
+                    insert_route_params:
+                      - name: setId
+                        value: this.params.setId
+                    edit_route: sets.details.edit
+                    edit_route_params:
+                      - name: setId
+                        value: UI._parentData(1).params.setId
+                      - name: itemId
+                        value: this._id
+              - name: insert
+                components:
+                  - name: insert_form
+                    type: form
+                    mode: insert
+                    title: Add exercise
+                    query_name: exercises_empty
+                    hidden_fields:
+                      - name: setId
+                        value: this.params.setId
+                    submit_route: sets.details
+                    submit_route_params:
+                      - name: setId
+                        value: this.params.setId
+                    cancel_route: sets.details
+                    cancel_route_params:
+                      - name: setId
+                        value: this.params.setId
+              - name: edit
+                route_params:
+                  - itemId
+                components:
+                  - name: edit_form
+                    type: form
+                    mode: update
+                    title: Edit exercise
+                    query_name: set_item
+                    submit_route: sets.details
+                    submit_route_params:
+                      - name: setId
+                        value: this.params.setId
+                    cancel_route: sets.details
+                    cancel_route_params:
+                      - name: setId
+                        value: this.params.setId
+          - name: edit
+            route_params:
+              - setId
+            components:
+              - name: edit_form
+                type: form
+                mode: update
+                title: Edit set
+                submit_route: sets
+                cancel_route: sets
+                query_name: set_details
+      - name: user_settings
+        pages:
+          - name: profile
+            components:
+              - name: edit_form
+                type: form
+                mode: update
+                title: Edit your profile
+                submit_route: user_settings.profile
+                query_name: current_user_data
+                fields:
+                  - name: profile.name
+                    title: Name
+                    required: true
+                  - name: profile.email
+                    title: E-mail
+                    type: email
+                    required: true
+                  - name: profile.facebook
+                    title: Facebook URL
+                  - name: profile.google
+                    title: Google+ URL
+                  - name: profile.twitter
+                    title: Twitter ID
+                  - name: profile.website
+                    title: Website URL
+          - name: change_pass
+            template: change_pass
+        components:
+          - name: side_menu
+            type: menu
+            class: nav nav-stacked nav-pills
+            items:
+              - title: Profile
+                route: user_settings.profile
+              - title: Change password
+                route: user_settings.change_pass
+      - name: logout
+        template: logout
+    components:
+      - name: left_menu
+        type: menu
+        class: nav navbar-nav
+        dest_selector: '#menu'
+        items:
+          - title: Home
+            route: home_private
+            icon_class: fa fa-home
+          - title: Sets
+            route: sets
+          - title: Workouts
+            route: workouts
+      - name: right_menu
+        type: menu
+        class: nav navbar-nav navbar-right
+        dest_selector: '#menu'
+        items:
+          - title: '{{userEmail}}'
+            items:
+              - title: Settings
+                route: user_settings
+              - title: Logout
+                route: logout
