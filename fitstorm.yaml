@@ -43,6 +43,17 @@ application:
         #   default: '{{nextSetNumber}}'
           required: true
           exportable: false
+        - name: workoutId
+          title: workout
+          input: hidden
+          required: false
+          value: null
+          show_in_insert_form: false
+          show_in_update_form: false
+          join_collection: workouts
+          show_in_dataview: false
+          show_in_read_only_form: false
+          lookup_query_name: workout_list
         # - name: workoutId
         #   title: Workout
         #   required: true
@@ -199,6 +210,11 @@ application:
       filter:
         _id: ':itemId'
       find_one: true
+    - name: workout_sets
+      collection: sets
+      filter:
+        workoutId: ':workoutId'
+      find_one: false
     - name: current_user_data
       collection: users
       filter:
@@ -284,6 +300,60 @@ application:
                 query_name: workout_details
                 close_route: workouts
                 back_route: workouts
+            force_yield_subpages: true
+            pages:
+              - name: items
+                components:
+                  - name: view
+                    type: data_view
+                    text_if_empty: No sets!
+                    query_name: workout_sets
+                    insert_button_title: Add sets
+                    insert_route: workouts.details.insert
+                    insert_route_params:
+                      - name: workoutId
+                        value: this.params.workoutId
+                    edit_route: workouts.details.edit
+                    edit_route_params:
+                      - name: workoutId
+                        value: UI._parentData(1).params.workoutId
+                      - name: setId
+                        value: this._id
+              - name: insert
+                components:
+                  - name: insert_form
+                    type: form
+                    mode: insert
+                    title: Add Sets
+                    query_name: sets_empty
+                    hidden_fields:
+                      - name: workoutId
+                        value: this.params.workoutId
+                    submit_route: workouts.details
+                    submit_route_params:
+                      - name: workoutId
+                        value: this.params.workoutId
+                    cancel_route: workouts.details
+                    cancel_route_params:
+                      - name: workoutId
+                        value: this.params.workoutId
+              - name: edit
+                route_params:
+                  - setId
+                components:
+                  - name: edit_form
+                    type: form
+                    mode: update
+                    title: Edit set
+                    query_name: set_details
+                    submit_route: workouts.details
+                    submit_route_params:
+                      - name: workoutId
+                        value: this.params.workoutId
+                    cancel_route: workouts.details
+                    cancel_route_params:
+                      - name: workoutId
+                        value: this.params.workoutId
           - name: edit
             route_params:
               - workoutId
