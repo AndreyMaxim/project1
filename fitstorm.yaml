@@ -25,6 +25,27 @@ application:
           show_in_insert_form: false
           show_in_update_form: false
           exportable: false
+          before_insert_code: 'if(!doc.workoutDuration) doc.workoutDuration = 0;'
+        - name: setId
+          title: Select Set
+          required: false
+          class: hidden
+          input: select
+          lookup_query_name: set_list
+          lookup_field: setName
+          lookup_key: _id
+          show_in_dataview: false
+          show_in_read_only_form: false
+          exportable: false
+          join_collection: sets
+          join_fields:
+            - setName
+          join_container: set
+        - name: set.setName
+          title: Set
+          show_in_insert_form: false
+          show_in_update_form: false
+          exportable: false
         - name: publish
           title: Publish
           type: bool
@@ -300,43 +321,43 @@ application:
                 query_name: workout_details
                 close_route: workouts
                 back_route: workouts
-            force_yield_subpages: true
+            # force_yield_subpages: true
             pages:
-              - name: items
-                components:
-                  - name: view
-                    type: data_view
-                    text_if_empty: No sets!
-                    query_name: workout_sets
-                    insert_button_title: Add sets
-                    insert_route: workouts.details.insert
-                    insert_route_params:
-                      - name: workoutId
-                        value: this.params.workoutId
-                    edit_route: workouts.details.edit
-                    edit_route_params:
-                      - name: workoutId
-                        value: UI._parentData(1).params.workoutId
-                      - name: setId
-                        value: this._id
-              - name: insert
-                components:
-                  - name: insert_form
-                    type: form
-                    mode: insert
-                    title: Add Sets
-                    query_name: sets_empty
-                    hidden_fields:
-                      - name: workoutId
-                        value: this.params.workoutId
-                    submit_route: workouts.details
-                    submit_route_params:
-                      - name: workoutId
-                        value: this.params.workoutId
-                    cancel_route: workouts.details
-                    cancel_route_params:
-                      - name: workoutId
-                        value: this.params.workoutId
+              # - name: items
+              #   components:
+              #     - name: view
+              #       type: data_view
+              #       text_if_empty: No sets!
+              #       query_name: workout_sets
+              #       insert_button_title: Add sets
+              #       insert_route: workouts.details.insert
+              #       insert_route_params:
+              #         - name: workoutId
+              #           value: this.params.workoutId
+              #       edit_route: workouts.details.edit
+              #       edit_route_params:
+              #         - name: workoutId
+              #           value: UI._parentData(1).params.workoutId
+              #         - name: setId
+              #           value: this._id
+              # - name: insert
+              #   components:
+              #     - name: insert_form
+              #       type: form
+              #       mode: insert
+              #       title: Add Sets
+              #       query_name: sets_empty
+              #       hidden_fields:
+              #         - name: workoutId
+              #           value: this.params.workoutId
+              #       submit_route: workouts.details
+              #       submit_route_params:
+              #         - name: workoutId
+              #           value: this.params.workoutId
+              #       cancel_route: workouts.details
+              #       cancel_route_params:
+              #         - name: workoutId
+              #           value: this.params.workoutId
               - name: edit
                 route_params:
                   - setId
