@@ -556,3 +556,8 @@ application:
                 route: user_settings
               - title: Logout
                 route: logout
+  copy_files:
+    - source: files/root/mup.json
+      dest: OUTPUT_DIR
+    - source: files/root/settings.json
+      dest: OUTPUT_DIR
