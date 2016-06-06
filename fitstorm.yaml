@@ -26,26 +26,6 @@ application:
           show_in_update_form: false
           exportable: false
           before_insert_code: 'if(!doc.workoutDuration) doc.workoutDuration = 0;'
-        - name: setId
-          title: Select Set
-          required: false
-          class: hidden
-          input: select
-          lookup_query_name: set_list
-          lookup_field: setName
-          lookup_key: _id
-          show_in_dataview: false
-          show_in_read_only_form: false
-          exportable: false
-          join_collection: sets
-          join_fields:
-            - setName
-          join_container: set
-        - name: set.setName
-          title: Set
-          show_in_insert_form: false
-          show_in_update_form: false
-          exportable: false
         - name: publish
           title: Publish
           type: bool
@@ -321,8 +301,14 @@ application:
                 query_name: workout_details
                 close_route: workouts
                 back_route: workouts
-            # force_yield_subpages: true
+            force_yield_subpages: true
             pages:
+              - name: items
+                components:
+                  - name: Select Sets
+                    type: custom_component
+                    query_name: workout_sets
+                    custom_template: components/set_selection
               # - name: items
               #   components:
               #     - name: view
