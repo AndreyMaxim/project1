@@ -281,6 +281,7 @@ application:
               - name: workoutId
                 value: this._id
         pages:
+          -
           - name: insert
             components:
               - name: insert_form
@@ -305,45 +306,20 @@ application:
             pages:
               - name: items
                 components:
-                  - name: Select Sets
+                  - name: live_page_container
+                    type: div
+                    class: form-group
+                    components:
+                      - name: title
+                        type: custom_component
+                        html: <label>Link to:</label>
+                      - name: live_page_button
+                        type: custom_component
+                        html: <p><a href="{{pathFor 'workouts.live' workoutId=this.params.workoutId}}" class="btn btn-link">Live page</a></p>
+                  - name: select_sets
                     type: custom_component
                     query_name: workout_sets
                     custom_template: components/set_selection
-              # - name: items
-              #   components:
-              #     - name: view
-              #       type: data_view
-              #       text_if_empty: No sets!
-              #       query_name: workout_sets
-              #       insert_button_title: Add sets
-              #       insert_route: workouts.details.insert
-              #       insert_route_params:
-              #         - name: workoutId
-              #           value: this.params.workoutId
-              #       edit_route: workouts.details.edit
-              #       edit_route_params:
-              #         - name: workoutId
-              #           value: UI._parentData(1).params.workoutId
-              #         - name: setId
-              #           value: this._id
-              # - name: insert
-              #   components:
-              #     - name: insert_form
-              #       type: form
-              #       mode: insert
-              #       title: Add Sets
-              #       query_name: sets_empty
-              #       hidden_fields:
-              #         - name: workoutId
-              #           value: this.params.workoutId
-              #       submit_route: workouts.details
-              #       submit_route_params:
-              #         - name: workoutId
-              #           value: this.params.workoutId
-              #       cancel_route: workouts.details
-              #       cancel_route_params:
-              #         - name: workoutId
-              #           value: this.params.workoutId
               - name: edit
                 route_params:
                   - setId
@@ -372,6 +348,13 @@ application:
                 submit_route: workouts
                 cancel_route: workouts
                 query_name: workout_details
+          - name: live
+            route_params:
+              - workoutId
+            components: 
+              - name: live page
+                type: custom_component
+                html: <h1> Live Page </h1>
       - name: sets
         components:
           - name: view
@@ -414,6 +397,16 @@ application:
                 layout: horizontal
                 query_name: set_details
                 back_route: sets
+              - name: live_page_container
+                type: div
+                class: form-group
+                components:
+                  - name: title
+                    type: custom_component
+                    html: <label>Link to:</label>
+                  - name: live_page_button
+                    type: custom_component
+                    html: <p><a href="{{pathFor 'sets.live' setId=this.params.setId}}" class="btn btn-link">Live page</a></p>
             force_yield_subpages: true
             pages:
               - name: items
@@ -479,6 +472,13 @@ application:
                 submit_route: sets
                 cancel_route: sets
                 query_name: set_details
+          - name: live
+            route_params:
+              - setId
+            components:
+              - name: live_page
+                type: custom_component
+                html: <h1>Live Page</h1>
       - name: user_settings
         pages:
           - name: profile
