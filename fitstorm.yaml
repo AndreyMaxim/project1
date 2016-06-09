@@ -1,7 +1,6 @@
 application:
   title: FitStorm
   theme: bootswatch-paper
-#  on_user_created_code: "Workouts.insert({ name: 'Chuck Norris', email: 'internet@chucknorris.com', ownerId: user._id });"
   collections:
     - name: songs
     # Placeholder for songs?
@@ -41,7 +40,6 @@ application:
       fields:
         - name: setName
           title: Set Name
-        #   default: '{{nextSetNumber}}'
           required: true
           exportable: false
         - name: workoutId
@@ -80,11 +78,9 @@ application:
           show_in_insert_form: false
           show_in_update_form: false
           exportable: false
+          join_collection: set_exercises
         - name: type
           title: Type
-        #   type: float
-        #   show_in_insert_form: false
-        #   show_in_update_form: false
           exportable: false
         - name: publish
           title: Publish
@@ -132,6 +128,9 @@ application:
         - owner
       roles_allowed_to_delete:
         - owner
+      after_insert_code: 'Sets.update({ _id: doc.setId}, {$inc: { "setDuration": doc.duration }});'
+      after_remove_code: 'Sets.update({ _id: doc.setId}, {$inc: { "setDuration": (-1*doc.duration) }});'
+      after_update_code: 'Sets.update({ _id: doc.setId}, {$set: { "setDuration": _.reduce(SetExercises.find({ setId: doc.setId }).fetch(), function(sum, item){ return sum + item.duration; }, 0) }});'
     # This collection will be for the master exercise list.  Currently implemented as a dropdown
     # - name: exercises
     #   fields:
@@ -156,7 +155,7 @@ application:
       collection: workouts
       filter: {}
       options:
-        transform: 'function(doc) { var sum = 0; Sets.find({ workoutId: doc._id }).map(function(item) { if(item.totalDuration) sum += item.totalDuration; }); doc.totalDuration = sum; return doc; }'
+        transform: "function(doc) { var sum = 0, set_ids = _.pluck(doc.sets, '_id'); Sets.find({ _id: {$in: set_ids} }).map(function(item) { if(item.setDuration) sum += item.setDuration; }); doc.workoutDuration = sum; return doc; }"
         sort:
           - name
       related_queries:
@@ -172,7 +171,7 @@ application:
       filter:
         _id: ':workoutId'
       options:
-        transform: 'function(doc) { var sum = 0; Sets.find({ workoutId: doc._id }).map(function(item) { sum += item.totalDuration; }); doc.totalDuration = sum; return doc; }'
+        transform: "function(doc) { var sum = 0, set_ids = _.pluck(doc.sets, '_id'); Sets.find({ _id: {$in: set_ids} }).map(function(item) { if(item.setDuration) sum += item.setDuration; }); doc.workoutDuration = sum; return doc; }"
       related_queries:
         - name: set_list
     - name: set_list
@@ -182,6 +181,8 @@ application:
         sort:
           - - setName
             - desc
+      related_queries:
+        - name: set_exercises
     - name: sets_empty
       collection: sets
       filter:
@@ -195,8 +196,8 @@ application:
       filter:
         _id: ':setId'
       find_one: true
-      options:
-        transform: 'function(doc) { var sum = 0; Sets.find({ setId: doc._id }).map(function(item) { sum += item.setDuration; }); doc.setDuration = sum; return doc; }'
+      # options:
+        # transform: 'function(doc) { var sum = 0; SetExercises.find({ setId: doc._id }).map(function(item) { sum += item.duration; }); doc.setDuration = sum; return doc; }'
     - name: set_exercises
       collection: set_exercises
       filter:
@@ -229,7 +230,6 @@ application:
           - name: home_jumbotron
             title: FitStorm
             type: jumbotron
-            # text: '<b>This <a href="https://www.meteor.com" target="_blank">Meteor</a> application is made with <a href="http://www.meteorkitchen.com" target="_blank">meteor-kitchen</a> without manual coding.</b><br />It shows how to work with DataViews, Forms with dates and lookup fields, master-detail relations etc.<br />Source code (input file for generator) is <a href="https://github.com/perak/kitchen-examples/tree/master/example-sets" target="_blank">here</a>.'
             button_title: 'Login &raquo;'
             button_route: login
       - name: login
@@ -379,7 +379,6 @@ application:
                 mode: insert
                 title: New set
                 query_name: sets_empty
-                # helpers_code: "'nextSetNumber': function() { var max = 0; var setNumbers = Sets.find({}, { fields: { setNumber: 1 }}).fetch(); _.each(setNumbers, function(doc) { var intNum = parseInt(doc.setNumber); if(!isNaN(intNum) && intNum > max) max = intNum; }); return max + 1; }"
                 submit_route: sets.details
                 submit_route_params:
                   - name: setId
