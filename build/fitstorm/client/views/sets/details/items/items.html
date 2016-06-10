@@ -1,0 +1,98 @@
+<template name="SetsDetailsItems">
+	<div class="page-container container" id="content">
+		<div class="row" id="title_row">
+			<div class="col-md-12">
+				<div id="page_menu" class="pull-right">
+				</div>
+			</div>
+		</div>
+		{{> SetsDetailsItemsView}}
+	</div>
+</template>
+
+<template name="SetsDetailsItemsView">
+	<div id="sets-details-items-view" class="">
+		<form id="dataview-controls" class="form-inline">
+			<div id="dataview-controls-insert" class="form-group {{insertButtonClass}}">
+				<button type="submit" id="dataview-insert-button" class="btn btn-success">
+					<span class="fa fa-plus">
+					</span>
+					Add exercise
+				</button>
+			</div>
+			<div id="dataview-controls-search">
+				{{#if isNotEmpty}}
+				<div id="dataview-controls-search-group" class="form-group">
+					<label class="sr-only" for="search">
+						Search
+					</label>
+					<input type="text" class="form-control" id="dataview-search-input" placeholder="Search" name="search" value="{{searchString}}" autofocus="autofocus">
+					<button type="button" id="dataview-search-button" class="btn btn-primary">
+						<span class="fa fa-search">
+						</span>
+					</button>
+				</div>
+				{{/if}}
+			</div>
+		</form>
+		{{#if isNotEmpty}}
+			{{#if isNotFound}}
+		<div class="alert alert-warning">
+			"{{searchString}}" not found.
+		</div>
+		{{else}}
+		<div id="dataview-data">
+			{{#if viewAsTable}} {{> SetsDetailsItemsViewTable}} {{/if}}
+		</div>
+		{{/if}}
+		{{else}}
+		<div class="alert alert-info">
+			No items
+		</div>
+		{{/if}}
+	</div>
+</template>
+
+<template name="SetsDetailsItemsViewTable">
+	<table id="dataview-table" class="table table-striped">
+		<thead id="dataview-table-header">
+			<tr id="dataview-table-header-row">
+				<th class="th-sortable" data-sort="exercise">
+					Exercise
+				</th>
+				<th class="th-sortable" data-sort="duration">
+					Duration (secs)
+				</th>
+				<th>
+					&nbsp;
+				</th>
+				<th>
+					&nbsp;
+				</th>
+			</tr>
+		</thead>
+		<tbody id="dataview-table-items">
+			{{#each tableItems}} {{> SetsDetailsItemsViewTableItems}} {{/each}}
+		</tbody>
+	</table>
+</template>
+
+<template name="SetsDetailsItemsViewTableItems">
+	<tr id="dataview-table-items-row">
+		<td>
+			{{exercise}}
+		</td>
+		<td>
+			{{duration}}
+		</td>
+		<td class="td-icon">
+			<span id="edit-button" class="fa fa-pencil {{editButtonClass}}" title="Edit">
+			</span>
+		</td>
+		<td class="td-icon">
+			<span id="delete-button" class="fa fa-trash-o {{deleteButtonClass}}" title="Delete">
+			</span>
+		</td>
+	</tr>
+</template>
+

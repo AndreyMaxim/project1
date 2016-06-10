@@ -1,0 +1,23 @@
+<template name="SetsLive">
+	<div class="page-container container" id="content">
+		<div class="row" id="title_row">
+			<div class="col-md-12">
+				<h3 class='text-center'> {{ setDetail.setName }} </h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="text-center">
+				<audio id='setAudio' controls>
+				  <source src="{{audioSource}}" type="audio/mpeg">
+					Your browser does not support the audio element.
+				</audio>
+			</div>			
+		</div>
+		<div class="row text-center">
+			<h4 class='text-lead text-success' id="set-exercise-wrapper">
+				
+			</h4>
+		</div>
+	</div>
+</template>
+

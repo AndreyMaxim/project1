@@ -354,7 +354,7 @@ application:
             components: 
               - name: live page
                 type: custom_component
-                html: <h1> Live Page </h1>
+                custom_template: components/live_page
       - name: sets
         components:
           - name: view

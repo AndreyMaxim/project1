@@ -1,0 +1,78 @@
+<template name="SetsDetailsEdit">
+	<div class="page-container container" id="content">
+		<div class="row" id="title_row">
+			<div class="col-md-12">
+				<div id="page_menu" class="pull-right">
+				</div>
+			</div>
+		</div>
+		{{> SetsDetailsEditEditForm}}
+	</div>
+</template>
+
+<template name="SetsDetailsEditEditForm">
+	<div id="sets-details-edit-edit-form" class="">
+		<h2 id="component-title">
+			Edit exercise
+		</h2>
+		<form role="form">
+			{{#if errorMessage}}
+			<div class="alert alert-warning">
+				{{errorMessage}}
+			</div>
+			{{/if}}
+
+			{{#if infoMessage}}
+			<div class="alert alert-success">
+				{{infoMessage}}
+			</div>
+			{{/if}}
+			<div class="form-group  field-exercise">
+				<label for="exercise">
+					Exercise
+				</label>
+				<div class="input-div">
+					<select class="form-control" name="exercise" required="required" autofocus="autofocus">
+						<option value="Push-up" {{optionIsSelected set_item.exercise "Push-up"}}>							Push-up</option>
+						<option value="Crunch" {{optionIsSelected set_item.exercise "Crunch"}}>							Crunch</option>
+						<option value="Rest" {{optionIsSelected set_item.exercise "Rest"}}>							Rest</option>
+						<option value="Squat" {{optionIsSelected set_item.exercise "Squat"}}>							Squat</option>
+						<option value="Cluster Squat" {{optionIsSelected set_item.exercise "Cluster Squat"}}>							Cluster Squat</option>
+						<option value="Burpee" {{optionIsSelected set_item.exercise "Burpee"}}>							Burpee</option>
+						<option value="Jump Squat" {{optionIsSelected set_item.exercise "Jump Squat"}}>							Jump Squat</option>
+						<option value="Sit-up" {{optionIsSelected set_item.exercise "Sit-up"}}>							Sit-up</option>
+					</select>
+					<span id="help-text" class="help-block">
+					</span>
+					<span id="error-text" class="help-block">
+					</span>
+				</div>
+			</div>
+			<div class="form-group  field-duration">
+				<label for="duration">
+					Duration (secs)
+				</label>
+				<div class="input-div">
+					<input type="text" name="duration" value="{{set_item.duration}}" class="form-control" required="required" data-type="float">
+					<span id="help-text" class="help-block">
+					</span>
+					<span id="error-text" class="help-block">
+					</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="submit-div">
+					<button id="form-submit-button" class="btn btn-success" type="submit">
+						<span class="fa fa-check">
+						</span>
+						Save
+					</button>
+					<a href="#" id="form-cancel-button" class="btn btn-default">
+						Cancel
+					</a>
+				</div>
+			</div>
+		</form>
+	</div>
+</template>
+
