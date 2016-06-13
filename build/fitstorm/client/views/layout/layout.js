@@ -142,8 +142,10 @@ Template.PrivateLayoutRightMenu.events({
 	"click .toggle-text": function(e, t) {
 		e.preventDefault();
 		$(e.target).closest("ul").toggleClass("menu-hide-text");
+	},
+	"click .dropdown-toggle, .item-title, .caret" : function(){
+		$('#menu-item-dropdown').toggleClass('open');
 	}
-	
 });
 
 Template.PrivateLayoutRightMenu.helpers({
