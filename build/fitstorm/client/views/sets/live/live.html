@@ -13,10 +13,12 @@
 				</audio>
 			</div>			
 		</div>
-		<div class="row text-center">
-			<h4 class='text-lead text-success' id="set-exercise-wrapper">
-				
-			</h4>
+		<div class="row text-center set-exercises-wrapper pre-scrollable">
+			{{#each exercises}}
+				<p class='set-exercise-item' id="order-{{@index}}" data-duration="{{duration}}" data-ends-at="{{startedAt exercises @index}}"> {{ exercise }}
+					<span class="duration-wrapper"> ({{duration}} sec)</span>
+				</p>
+			{{/each}}
 		</div>
 	</div>
 </template>
