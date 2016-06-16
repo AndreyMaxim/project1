@@ -35,8 +35,7 @@ this.SetsLiveController = RouteController.extend({
 
 		var data = {
 			params: this.params || {},
-			set_details   : Sets.findOne({ _id: this.params.setId }), 
-			set_exercises : SetExercises.find({ setId: this.params.setId })
+			set_details   : Sets.findOne({ _id: this.params.setId },{ transform: function(doc){ doc.set_exercises_joined = SetExercises.find({setId: doc._id}).fetch(); return doc; }}), 
 		};
 		
 

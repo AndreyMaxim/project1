@@ -10,3 +10,6 @@ Meteor.publish("set_item", function(itemId) {
 	return SetExercises.find({_id:itemId}, {});
 });
 
+Meteor.publish("exercises_all", function() {
+	return SetExercises.find({}, {});
+});

@@ -4,16 +4,16 @@ var pageSession = new ReactiveDict(),
 Template.SetsLive.rendered = function() {
 	var set_details = this.data.set_details,
 		audio = Songs.findOne({ _id: set_details.songId}),
-		set_exercises = this.data.set_exercises.fetch(),
+		// set_exercises = this.data.set_exercises.fetch(),
 		start = 1;
 
 	pageSession.set('setAudio', audio.url());
-	pageSession.set('setExercises', set_exercises);
+	pageSession.set('setExercises', set_details.set_exercises_joined);
 	pageSession.set('set_details', set_details);
 
 	popcorn = Popcorn('#setAudio');
-
-	_.each(set_exercises, function(obj, id) {
+	
+	_.each(set_details.set_exercises_joined, function(obj, id) {
 		target = 'order-' + id;
 		popcorn
 			.footnote({
@@ -29,14 +29,7 @@ Template.SetsLive.rendered = function() {
 
 	popcorn.on( "timeupdate", function()
 	{
-		// jquery dom objects
-		$exerciseWrapper = $('.set-exercises-wrapper');
-		$curExercise = $exerciseWrapper.find('p.text-success');
-		$durationEl  = $curExercise.find('span.duration-wrapper');
-
-		// countdown timer
-		countdownTimer = getRemainingTime($curExercise.data('ends-at') || $exerciseWrapper.find('p:first-child').data('duration'), this.roundTime());
-		$durationEl.text('(' + countdownTimer + ' sec)');
+		setCountdownTimer(this);
 	});
 };
 
@@ -57,13 +50,19 @@ Template.SetsLive.helpers({
 	}
 });
 
-Template.registerHelper('startedAt', function (set_exercises, id) {
+Template.registerHelper('startedAt', function (setId, idx) {
 	var sum_duration = 1;
-	_.each(set_exercises, function(obj, index) {
-		if(index <= id) {
-			sum_duration += obj.duration;
+	// _.each(set_exercises, function(obj, index) {
+	// 	if(index <= idx) {
+	// 		sum_duration += obj.duration;
+	// 	}
+	// });
+	SetExercises.find({setId: setId}).fetch().map(function(exercise, index){
+		if(index <= idx){
+			sum_duration += exercise.duration;
 		}
 	});
+
     return sum_duration;
 });
 
@@ -74,4 +73,15 @@ getRemainingTime = function(audioDuration, time) {
 		return 0;
 	}
 	return countdown;
-}
+};
+
+setCountdownTimer = function(popcorn) {
+	// jquery dom objects
+	$exerciseWrapper = $('.set-exercises-wrapper');
+	$curExercise = $exerciseWrapper.find('p.text-success:visible');
+	$durationEl  = $curExercise.find('span.duration-wrapper');
+
+	// countdown timer
+	countdownTimer = getRemainingTime($curExercise.data('ends-at') || $exerciseWrapper.find('p:first-child').data('duration'), popcorn.roundTime());
+	$durationEl.text('(' + countdownTimer + ' sec)');
+};
