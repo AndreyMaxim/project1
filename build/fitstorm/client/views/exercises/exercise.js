@@ -1,6 +1,5 @@
 var pageSession = new ReactiveDict(),
-	params = [],
-	isOnInsert = false;
+	params = [];
 	
 Template.AddExercises.rendered = function() {
 	params = this.data.params;
@@ -8,9 +7,8 @@ Template.AddExercises.rendered = function() {
 
 	if(params.hasOwnProperty('setId')) {
 		set_exercises = this.data.set_exercises.fetch();
-	}else {
-		isOnInsert = true;
 	}
+	
 	pageSession.set('exercises', set_exercises);
 	pageSession.set('exerciseAction', null);
 	pageSession.set('hasExercises', set_exercises.length);
