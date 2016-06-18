@@ -1,5 +1,5 @@
-var pageSession = new ReactiveDict();
-
+var pageSession = new ReactiveDict(),
+	params = [];
 Template.SetsEdit.rendered = function() {
 	
 };
@@ -139,3 +139,4 @@ Template.SetsEditEditForm.helpers({
 	}
 	
 });
+

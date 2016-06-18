@@ -1,4 +1,4 @@
-var pageSession = new ReactiveDict();
+var pageSession   = new ReactiveDict();
 
 Template.SetsInsert.rendered = function() {
 	
@@ -85,9 +85,17 @@ Template.SetsInsertInsertForm.events({
 
 			},
 			function(values) {
-				
 
 				newId = Sets.insert(values, function(e) { if(e) errorAction(e); else submitAction(); });
+
+				_.each(getExercises(), function(exercise) {
+					SetExercises.update(
+						{_id: exercise._id},
+						{$set: {
+					        'setId': newId
+					    }
+					});
+				});
 			}
 		);
 
