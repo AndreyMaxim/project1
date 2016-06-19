@@ -1,4 +1,5 @@
 accounts-base@1.2.7
+accounts-oauth@1.1.12
 accounts-password@1.1.8
 allow-deny@1.0.4
 autoupdate@1.2.9
@@ -10,6 +11,7 @@ blaze@2.1.7
 blaze-html-templates@1.0.4
 blaze-tools@1.0.8
 boilerplate-generator@1.0.8
+bozhao:link-accounts@1.2.9
 caching-compiler@1.0.4
 caching-html-compiler@1.0.6
 callback-hook@1.0.8
@@ -87,6 +89,8 @@ nemo64:bootstrap@3.3.5_3
 nemo64:bootstrap-data@3.3.5
 npm-bcrypt@0.8.5
 npm-mongo@1.4.43
+oauth@1.1.10
+oauth2@1.1.9
 observe-sequence@1.0.11
 ordered-dict@1.0.7
 perak:joins@1.0.6
@@ -117,3 +121,6 @@ underscore@1.0.8
 url@1.0.9
 webapp@1.2.8
 webapp-hashing@1.0.9
+xinranxiao:accounts-spotify@1.0.2
+xinranxiao:spotify@1.0.2
+xinranxiao:spotify-web-api@1.0.2

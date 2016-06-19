@@ -78,6 +78,22 @@
 					</span>
 				</div>
 			</div>
+			<p>Or</p>
+			<div class="form-group">
+				{{#if spotifyPlaylist.length}}
+					<select class="form-control" id="spotify-playlist" name="spotifyPlaylist">
+						<option class='disabled' disabled selected>Select From Your Spotify Playlist</option>
+						{{#each spotifyPlaylist}}
+							<option value="{{id}}"> {{ name }} </option>
+						{{/each}}
+					</select>
+				{{else}}
+					<button class="btn btn-success" type="button" id="select-spotify-playlist">
+						Select Spotify Playlist
+					</button>
+				{{/if}}
+			</div>
+
 			<div class="form-group">
 				{{> AddExercises }}
 			</div>

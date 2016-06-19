@@ -40,3 +40,7 @@ mrt:moment
 rajit:bootstrap3-datepicker
 iron:middleware-stack@1.1.0
 mrt:popcorn
+xinranxiao:spotify-web-api
+xinranxiao:spotify
+xinranxiao:accounts-spotify
+bozhao:link-accounts

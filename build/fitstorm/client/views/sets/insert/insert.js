@@ -85,6 +85,10 @@ Template.SetsInsertInsertForm.events({
 
 			},
 			function(values) {
+				
+				if(songId = values.spotifyPlaylist) {
+					values.songId = songId;
+				}
 
 				newId = Sets.insert(values, function(e) { if(e) errorAction(e); else submitAction(); });
 
@@ -125,17 +129,31 @@ Template.SetsInsertInsertForm.events({
 	var dataField = fileInput.attr("data-field");
 	var hiddenInput = fileInput.closest("form").find("input[name='" + dataField + "']");
 
-	FS.Utility.eachFile(event, function(file) {
-		Songs.insert(file, function (err, fileObj) {
-			if(err) {
-				console.log(err);
-			} else {
-				hiddenInput.val(fileObj._id);
+		FS.Utility.eachFile(event, function(file) {
+			Songs.insert(file, function (err, fileObj) {
+				if(err) {
+					console.log(err);
+				} else {
+					hiddenInput.val(fileObj._id);
+				}
+			});
+		});
+	},
+	"click #select-spotify-playlist": function() {
+		var options = {
+		  showDialog: false, // Whether or not to force the user to approve the app again if they’ve already done so.
+		  requestPermissions: ['user-read-email','playlist-read-private'], // Spotify access scopes.
+		};
+
+		Meteor.linkWithSpotify(options, function(err) {
+			if(!err) {
+			  var spotifyAccessToken = null;
+			  Meteor.call('selectPlaylist', spotifyAccessToken, function(err, data){
+			  	pageSession.set('spotifyObj', data);
+			  });
 			}
 		});
-	});
-}
-
+	},
 });
 
 Template.SetsInsertInsertForm.helpers({
@@ -144,6 +162,12 @@ Template.SetsInsertInsertForm.helpers({
 	},
 	"errorMessage": function() {
 		return pageSession.get("setsInsertInsertFormErrorMessage");
+	},
+	"spotifyPlaylist": function(){
+		var spotifyObj = pageSession.get('spotifyObj');
+		if(spotifyObj) {
+			return spotifyObj.items;
+		}
+		return [];
 	}
-	
 });

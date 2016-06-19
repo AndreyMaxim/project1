@@ -4,9 +4,8 @@ var pageSession = new ReactiveDict(),
 Template.SetsLive.rendered = function() {
 	var set_details = this.data.set_details,
 		audio = Songs.findOne({ _id: set_details.songId}),
-		// set_exercises = this.data.set_exercises.fetch(),
 		start = 1;
-
+	
 	pageSession.set('setAudio', audio.url());
 	pageSession.set('setExercises', set_details.set_exercises_joined);
 	pageSession.set('set_details', set_details);

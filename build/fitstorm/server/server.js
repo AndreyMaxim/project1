@@ -108,8 +108,6 @@ Meteor.startup(function() {
 			Accounts.loginServiceConfiguration.insert(settingsObject);
 		}
 	}
-
-	
 });
 
 Meteor.methods({
