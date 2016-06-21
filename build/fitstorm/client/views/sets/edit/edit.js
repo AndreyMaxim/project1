@@ -14,7 +14,7 @@ Template.SetsEdit.helpers({
 
 Template.SetsEditEditForm.rendered = function() {
 	
-
+	pageSession.set("setType", this.data.set_details.type);
 	pageSession.set("setsEditEditFormInfoMessage", "");
 	pageSession.set("setsEditEditFormErrorMessage", "");
 
@@ -110,7 +110,10 @@ Template.SetsEditEditForm.events({
 
 		/*BACK_REDIRECT*/
 	}, 
-
+	"change .setType-field": function(e){
+		pageSession.set("setType", e.target.value);
+		setSetType(e.target.value);
+	},
 	"change #field-song-id": function(e, t) {
 	e.preventDefault();
 	var fileInput = $(e.currentTarget);
@@ -136,7 +139,21 @@ Template.SetsEditEditForm.helpers({
 	},
 	"errorMessage": function() {
 		return pageSession.get("setsEditEditFormErrorMessage");
-	}
-	
+	},
+	"amrapCustomClass":function() {
+		var setType = pageSession.get('setType'),
+			customClass = 'hidden';
+		if(setType && setType.indexOf('AMRAP') > -1) {
+			customClass = '';
+		}
+		return customClass;
+	},
+	"intervalCustomClass": function(){
+		var setType = pageSession.get('setType'),
+			customClass = 'hidden';
+		if(setType && setType.indexOf('Interval') > -1) {
+			customClass = '';
+		}
+		return customClass;
+	},
 });
-

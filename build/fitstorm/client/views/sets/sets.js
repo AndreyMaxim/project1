@@ -23,6 +23,12 @@ var SetsViewItems = function(cursor) {
 	if(typeof(sortAscending) == "undefined") sortAscending = true;
 
 	var raw = cursor.fetch();
+	
+	_.each(raw, function(set) {
+		if(set.type.indexOf('AMRAP') > -1) {
+			set.setDuration = set.timeframe;
+		}
+	});
 
 	// filter
 	var filtered = [];

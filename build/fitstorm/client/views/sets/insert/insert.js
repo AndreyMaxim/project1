@@ -17,6 +17,7 @@ Template.SetsInsertInsertForm.rendered = function() {
 
 	pageSession.set("setsInsertInsertFormInfoMessage", "");
 	pageSession.set("setsInsertInsertFormErrorMessage", "");
+	pageSession.set("setType", "AMRAP");
 
 	$(".input-group.date").each(function() {
 		var format = $(this).find("input[type='text']").attr("data-format");
@@ -122,7 +123,10 @@ Template.SetsInsertInsertForm.events({
 
 		/*BACK_REDIRECT*/
 	}, 
-
+	"change .setType-field": function(e){
+		pageSession.set("setType", e.target.value);
+		setSetType(e.target.value);
+	},
 	"change #field-song-id": function(e, t) {
 	e.preventDefault();
 	var fileInput = $(e.currentTarget);
@@ -162,6 +166,22 @@ Template.SetsInsertInsertForm.helpers({
 	},
 	"errorMessage": function() {
 		return pageSession.get("setsInsertInsertFormErrorMessage");
+	},
+	"amrapCustomClass":function() {
+		var setType = pageSession.get('setType'),
+			customClass = 'hidden';
+		if(setType && setType.indexOf('AMRAP') > -1) {
+			customClass = '';
+		}
+		return customClass;
+	},
+	"intervalCustomClass": function(){
+		var setType = pageSession.get('setType'),
+			customClass = 'hidden';
+		if(setType && setType.indexOf('Interval') > -1) {
+			customClass = '';
+		}
+		return customClass;
 	},
 	"spotifyPlaylist": function(){
 		var spotifyObj = pageSession.get('spotifyObj');

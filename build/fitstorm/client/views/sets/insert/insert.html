@@ -39,18 +39,58 @@
 					</span>
 				</div>
 			</div>
-			<div class="form-group  field-type">
+			<div class="form-group field-type">
 				<label for="type">
 					Type
 				</label>
 				<div class="input-div">
-					<input type="text" name="type" value="" class="form-control">
+					<select class="setType-field form-control" name="type" autofocus="autofocus" required="required">
+						<option selected="true" value="AMRAP"> AMRAP </option>
+						<option value="Interval"> Interval </option>
+					</select>
+					<span id="help-text" class="help-block"></span>
+					<span id="error-text" class="help-block"></span>
+				</div>
+			</div>
+
+			<div class="form-group field-song-id {{intervalCustomClass}}">
+				<label for="songId">
+					Song (mp3 only)
+				</label>
+				<div class="input-div">
+					<input type="file" id="field-song-id" class="file" multiple="false" data-show-upload="false" data-show-caption="true" data-field="songId">
+					<input type="hidden" name="songId" value="">
 					<span id="help-text" class="help-block">
 					</span>
 					<span id="error-text" class="help-block">
 					</span>
 				</div>
 			</div>
+			<div class="form-group hidden">
+				<span> Or </span>
+				{{#if spotifyPlaylist.length}}
+					<select class="form-control" id="spotify-playlist" name="spotifyPlaylist">
+						<option class='disabled' disabled selected>Select From Your Spotify Playlist</option>
+						{{#each spotifyPlaylist}}
+							<option value="{{id}}"> {{ name }} </option>
+						{{/each}}
+					</select>
+				{{else}}
+					<button class="btn btn-success" type="button" id="select-spotify-playlist">
+						Select Spotify Playlist
+					</button>
+				{{/if}}
+			</div>
+
+			<div class="form-group {{amrapCustomClass}}">
+				<label form="cap-time">
+					Time Frame/Cap Time
+				</label>
+				<div class="input-div">
+					<input class="form-control" type="number" value="" name="timeframe" placeholder="Enter Timeframe in minutes">
+				</div>
+			</div>
+
 			<div class="form-group  field-publish">
 				<div class="input-div">
 					<div class="checkbox">
@@ -64,34 +104,6 @@
 					<span id="error-text" class="help-block">
 					</span>
 				</div>
-			</div>
-			<div class="form-group  field-song-id">
-				<label for="songId">
-					Song (mp3 only)
-				</label>
-				<div class="input-div">
-					<input type="file" id="field-song-id" class="file" multiple="false" data-show-upload="false" data-show-caption="true" data-field="songId">
-					<input type="hidden" name="songId" value="">
-					<span id="help-text" class="help-block">
-					</span>
-					<span id="error-text" class="help-block">
-					</span>
-				</div>
-			</div>
-			<p>Or</p>
-			<div class="form-group">
-				{{#if spotifyPlaylist.length}}
-					<select class="form-control" id="spotify-playlist" name="spotifyPlaylist">
-						<option class='disabled' disabled selected>Select From Your Spotify Playlist</option>
-						{{#each spotifyPlaylist}}
-							<option value="{{id}}"> {{ name }} </option>
-						{{/each}}
-					</select>
-				{{else}}
-					<button class="btn btn-success" type="button" id="select-spotify-playlist">
-						Select Spotify Playlist
-					</button>
-				{{/if}}
 			</div>
 
 			<div class="form-group">

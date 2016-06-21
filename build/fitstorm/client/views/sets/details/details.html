@@ -9,15 +9,10 @@
 					</div>
 				</div>
 				{{> SetsDetailsDetailsForm}}
-				<div id="live_page_container" class="form-group">
-					<label>
-						Link to:
-					</label>
-					<p>
-						<a href="{{pathFor 'sets.live' setId=this.params.setId}}" class="btn btn-link">
-							Live page
-						</a>
-					</p>
+				<div class="form-horizontal">
+					<a href="{{pathFor 'sets.live' setId=this.params.setId}}" class="text-lead">
+						Live page
+					</a>
 				</div>
 			</div>
 		</div>
@@ -25,7 +20,7 @@
 			<div class="col-md-12" id="menu">
 			</div>
 		</div>
-		<div class="row">
+		<div class="row hidden">
 			<div class="col-md-12" id="subcontent">
 				{{> yield region='SetsDetailsSubcontent'}}
 			</div>
@@ -64,7 +59,7 @@
 					</p>
 				</div>
 			</div>
-			<div class="form-group  field-set-duration">
+			<div class="form-group  field-set-duration hidden">
 				<label for="setDuration" class="col-sm-3 control-label">
 					Duration
 				</label>

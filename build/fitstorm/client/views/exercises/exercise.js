@@ -7,6 +7,10 @@ Template.AddExercises.rendered = function() {
 
 	if(params.hasOwnProperty('setId')) {
 		set_exercises = this.data.set_exercises.fetch();
+		set = Sets.findOne(params.setId);
+		pageSession.set('setType', set.type);
+	}else{
+		pageSession.set('setType', 'AMRAP');
 	}
 	
 	pageSession.set('exercises', set_exercises);
@@ -39,6 +43,13 @@ Template.AddExercises.helpers({
 		}else{
 			return 30;
 		}
+	},
+	"getLabel" : function(){
+		var setType = pageSession.get('setType');
+		if(setType.indexOf('AMRAP') > -1) {
+			return 'Rep/Quantity';
+		}
+		return 'Duration';
 	}
 });
 
@@ -104,4 +115,8 @@ getValue = function(obj, index){
 }
 getExercises = function(){
 	return pageSession.get('exercises');
+}
+
+setSetType = function(setType) {
+	pageSession.set('setType', setType);
 }
