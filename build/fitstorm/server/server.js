@@ -28,6 +28,23 @@ Meteor.startup(function() {
 	//     }
 	// }
 	//
+	
+	if(Exercises.find().fetch().length == 0) {
+		var exercises = [
+			{name: 'Push-up'},
+			{name: 'Crunch'},
+			{name: 'Rest'},
+			{name: 'Squat'},
+			{name: 'Cluster Squat'},
+			{name: 'Burpee'},
+			{name: 'Jump Squat'},
+			{name: 'Sit-up'}
+		];
+		exercises.forEach(function(exercise){
+			Exercises.insert(exercise);
+		});
+	}
+
 	if(Accounts && Accounts.loginServiceConfiguration && Meteor.settings && Meteor.settings.oauth && _.isObject(Meteor.settings.oauth)) {
 		// google
 		if(Meteor.settings.oauth.google && _.isObject(Meteor.settings.oauth.google)) {

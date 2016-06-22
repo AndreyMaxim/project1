@@ -20,7 +20,9 @@ this.SetsInsertController = RouteController.extend({
 
 		var subs = [
 			Meteor.subscribe("sets_empty"),
-			Meteor.subscribe("set_list")
+			Meteor.subscribe("set_list"),
+			Meteor.subscribe("exercises"),
+			Meteor.subscribe("records")
 		];
 		var ready = true;
 		_.each(subs, function(sub) {
@@ -36,7 +38,9 @@ this.SetsInsertController = RouteController.extend({
 		var data = {
 			params: this.params || {},
 			sets_empty: Sets.findOne({_id:null}, {}),
-			set_list: Sets.find({}, {sort:[["setName","desc"]]})
+			set_list: Sets.find({}, {sort:[["setName","desc"]]}),
+			exercises: Exercises.find({},{}),
+			records: Records.find()
 		};
 		
 

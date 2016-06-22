@@ -8,19 +8,23 @@
 				<div class="form-group">
 					<label> Exercise: </label>
 					<select class="form-control" name="exercise" autofocus="autofocus" id="select-exercise" value="{{ getSelectValue }}">
-						<option value="Push-up" {{optionIsSelected getSelectValue "Push-up"}}>						Push-up</option>
-						<option value="Crunch" {{optionIsSelected getSelectValue "Crunch"}}>						Crunch</option>
-						<option value="Rest" {{optionIsSelected getSelectValue "Rest"}}>							Rest</option>
-						<option value="Squat" {{optionIsSelected getSelectValue "Squat"}}>							Squat</option>
-						<option value="Cluster Squat" {{optionIsSelected getSelectValue "Cluster Squat"}}>				Cluster Squat</option>
-						<option value="Burpee" {{optionIsSelected getSelectValue "Burpee"}}>						Burpee</option>
-						<option value="Jump Squat" {{optionIsSelected getSelectValue "Jump Squat"}}>					Jump Squat</option>
-						<option value="Sit-up" {{optionIsSelected getSelectValue "Sit-up"}}>						Sit-up</option>
+						{{#each exercises}}
+							<option value="{{name}}" {{optionIsSelected getSelectValue name }}> {{name}} </option>
+						{{/each}}
 					</select>
 				</div>
 				<div class="form-group">
 					<label> {{ getLabel }}: </label>
 					<input type='number' value="{{ getDurationValue }}" class="form-control" id="exercise-duration"/>
+				</div>
+				<div class="form-group">
+					<label> Cue: </label>
+					{{#if isRecording}}
+						<p class="text-lead">Recording ...</p>
+						<button type="button" class="btn btn-danger" id='record-cue-stop'> Stop Recording </button>
+					{{else}}
+						<button type="button" class="btn btn-primary" id='record-cue-start'> Start Recording </button>
+					{{/if}}
 				</div>
 				<div class="form-group">
 					<button class="btn btn-success save-exercise" type="button" data-id="{{ getSelectedId }}">

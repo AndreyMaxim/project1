@@ -21,6 +21,7 @@ this.SetsEditController = RouteController.extend({
 		var subs = [
 			Meteor.subscribe("set_details", this.params.setId),
 			Meteor.subscribe("set_exercises", this.params.setId),
+			Meteor.subscribe("exercises")
 		];
 		var ready = true;
 		_.each(subs, function(sub) {
@@ -36,7 +37,8 @@ this.SetsEditController = RouteController.extend({
 		var data = {
 			params: this.params || {},
 			set_details: Sets.findOne({_id:this.params.setId}, {}),
-			set_exercises: SetExercises.find({ setId: this.params.setId })
+			set_exercises: SetExercises.find({ setId: this.params.setId }),
+			exercises: Exercises.find({},{})
 		};
 		
 
