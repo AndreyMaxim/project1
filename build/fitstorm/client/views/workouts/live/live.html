@@ -28,7 +28,7 @@
 							</div>
 							<div class="set-exercises-wrapper">
 								{{#each set_exercises_joined }}
-									<p class='set-exercise-item' id="{{_id}}" data-duration="{{duration}}" data-ends-at="{{startedAt this.setId @index}}"> {{ exercise }}
+									<p class='set-exercise-item' id="ws-{{_id}}" data-duration="{{duration}}" data-ends-at="{{endsAt this.setId @index}}"> {{ exercise }}
 										<span class="duration-wrapper"> ({{duration}} sec)</span>
 									</p>
 								{{/each}}

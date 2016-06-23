@@ -1,29 +1,43 @@
 var pageSession = new ReactiveDict(),
-	popcorn = null;
+	popcorn = null,
+	cueTime = 3;
 
 Template.SetsLive.rendered = function() {
 	var set_details = this.data.set_details,
 		audio = Songs.findOne({ _id: set_details.songId}),
 		start = 1;
-	
-	pageSession.set('setAudio', audio.url());
+
+	pageSession.set('setAudio', audio ? audio.url() : null );
 	pageSession.set('setExercises', set_details.set_exercises_joined);
 	pageSession.set('set_details', set_details);
 
 	popcorn = Popcorn('#setAudio');
 	
-	_.each(set_details.set_exercises_joined, function(obj, id) {
-		target = 'order-' + id;
+	_.each(set_details.set_exercises_joined, function(obj, index) {
+		target = 'order-' + index;
+		playTime = start + cueTime;
+		endPlayTime = playTime + obj.duration;
+		
 		popcorn
 			.footnote({
-				start : start,
-				end   : start + obj.duration,
+				start : playTime,
+				end   : endPlayTime,
 				text  : '',
 				target: target,
 				effect: 'applyclass',
 				applyclass: "text-success, text-lead"
 			});
-		start += obj.duration;
+
+		popcorn.cue(start, function() {
+			this.mute();
+			Records.findOne(obj.recordId).play();
+		});
+		
+		popcorn.cue(playTime, function() {
+			this.unmute();
+		});
+
+		start = start + obj.duration + cueTime;
 	});
 
 	popcorn.on( "timeupdate", function()
@@ -33,9 +47,8 @@ Template.SetsLive.rendered = function() {
 };
 
 Template.SetsLive.events({
-	
-});
 
+});
 
 Template.SetsLive.helpers({
 	audioSource : function() {
@@ -49,28 +62,24 @@ Template.SetsLive.helpers({
 	}
 });
 
-Template.registerHelper('startedAt', function (setId, idx) {
+Template.registerHelper('endsAt', function (setId, idx) {
 	var sum_duration = 1;
-	// _.each(set_exercises, function(obj, index) {
-	// 	if(index <= idx) {
-	// 		sum_duration += obj.duration;
-	// 	}
-	// });
-	SetExercises.find({setId: setId}).fetch().map(function(exercise, index){
-		if(index <= idx){
-			sum_duration += exercise.duration;
+	SetExercises.find({setId: setId}).fetch().map(function(exercise, index) {
+		if(index <= idx) {
+			sum_duration = sum_duration + exercise.duration + cueTime;
 		}
 	});
-
     return sum_duration;
 });
 
-
 getRemainingTime = function(audioDuration, time) {
+
 	countdown = (parseInt(audioDuration) - time);
-	if(countdown < 0){
+
+	if(isNaN(countdown) || countdown < 0) {
 		return 0;
 	}
+	
 	return countdown;
 };
 
@@ -79,8 +88,12 @@ setCountdownTimer = function(popcorn) {
 	$exerciseWrapper = $('.set-exercises-wrapper');
 	$curExercise = $exerciseWrapper.find('p.text-success:visible');
 	$durationEl  = $curExercise.find('span.duration-wrapper');
+	currentTime = popcorn.roundTime();
 
 	// countdown timer
-	countdownTimer = getRemainingTime($curExercise.data('ends-at') || $exerciseWrapper.find('p:first-child').data('duration'), popcorn.roundTime());
+	if(currentTime < cueTime + 1) {
+		currentTime -= cueTime;
+	}
+	countdownTimer = getRemainingTime($curExercise.data('ends-at'), currentTime);
 	$durationEl.text('(' + countdownTimer + ' sec)');
 };

@@ -1,5 +1,6 @@
 var pageSession = new ReactiveDict(),
-	popcorn     = [];
+	popcorn     = [],
+	cueTime 	= 3;
 
 Template.WorkoutsLive.rendered = function() {
 	var sets = pageSession.get('sets');
@@ -11,17 +12,31 @@ Template.WorkoutsLive.rendered = function() {
 
 		_.each(parentObj.set_exercises_joined, function(obj, index) 
 		{
-			target = obj._id;
+			target = "ws-"+obj._id;
+			playTime = start + cueTime;
+			endPlayTime = playTime + obj.duration;
+
 			popcorn[parentIndex]
 				.footnote({
-					start : start,
-					end   : start + obj.duration,
+					start : playTime,
+					end   : endPlayTime,
 					text  : '',
 					target: target,
 					effect: 'applyclass',
 					applyclass: "text-success, text-lead"
 				});
-			start += obj.duration;
+
+			popcorn[parentIndex].cue(start, function() {
+				this.mute();
+				Records.findOne(obj.recordId).play();
+			});
+			
+			popcorn[parentIndex].cue(playTime, function() {
+				this.unmute();
+			});
+
+			start = start + obj.duration + cueTime;
+
 		});
 	});
 
@@ -39,8 +54,9 @@ Template.WorkoutsLive.events({
 
 Template.WorkoutsLive.helpers({
 	isActive: function(index){
-		if(index == 0)
+		if(index == 0){
 			return 'active';
+		}
 		return '';
 	}
 });

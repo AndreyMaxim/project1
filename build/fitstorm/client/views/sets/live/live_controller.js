@@ -21,6 +21,7 @@ this.SetsLiveController = RouteController.extend({
 		var subs = [
 			Meteor.subscribe('set_details', this.params.setId),
 			Meteor.subscribe('set_exercises', this.params.setId),
+			Meteor.subscribe('records')
 		];
 		var ready = true;
 		_.each(subs, function(sub) {
@@ -36,6 +37,7 @@ this.SetsLiveController = RouteController.extend({
 		var data = {
 			params: this.params || {},
 			set_details   : Sets.findOne({ _id: this.params.setId },{ transform: function(doc){ doc.set_exercises_joined = SetExercises.find({setId: doc._id}).fetch(); return doc; }}), 
+			records: Records.find({}, {}).fetch()
 		};
 		
 
