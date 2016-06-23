@@ -1,6 +1,6 @@
 var pageSession = new ReactiveDict(),
 	popcorn = null,
-	cueTime = 3;
+	cueTime = 2;
 
 Template.SetsLive.rendered = function() {
 	var set_details = this.data.set_details,
@@ -29,12 +29,7 @@ Template.SetsLive.rendered = function() {
 			});
 
 		popcorn.cue(start, function() {
-			this.mute();
 			Records.findOne(obj.recordId).play();
-		});
-		
-		popcorn.cue(playTime, function() {
-			this.unmute();
 		});
 
 		start = start + obj.duration + cueTime;
