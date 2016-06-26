@@ -9,15 +9,16 @@
 					<label> Exercise: </label>
 					<select class="form-control" name="exercise" autofocus="autofocus" id="select-exercise" value="{{ getSelectValue }}">
 						{{#each exercises}}
-							<option value="{{name}}" {{optionIsSelected getSelectValue name }}> {{name}} </option>
+							<option data-id="{{_id}}" value="{{name}}" {{optionIsSelected getSelectValue name }}> {{name}} </option>
 						{{/each}}
 					</select>
+					<input type="hidden" value="{{exerciseId}}" />	
 				</div>
 				<div class="form-group">
 					<label> {{ getLabel }}: </label>
 					<input type='number' value="{{ getDurationValue }}" class="form-control" id="exercise-duration"/>
 				</div>
-				<div class="form-group">
+				<div class="form-group hidden">
 					<label> Cue: </label>
 					{{#if isRecording}}
 						<p class="text-lead">Recording ...</p>

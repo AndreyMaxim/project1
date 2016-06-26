@@ -41,6 +41,7 @@ Meteor.startup(function() {
 			{name: 'Sit-up'}
 		];
 		exercises.forEach(function(exercise){
+			exercise.duration = 30;
 			Exercises.insert(exercise);
 		});
 	}

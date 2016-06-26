@@ -27,12 +27,8 @@ Template.WorkoutsLive.rendered = function() {
 				});
 
 			popcorn[parentIndex].cue(start, function() {
-				this.mute();
-				Records.findOne(obj.recordId).play();
-			});
-			
-			popcorn[parentIndex].cue(playTime, function() {
-				this.unmute();
+				var records = Records.find({exerciseId : obj.exerciseId});
+				Records.findOne(records.fetch()[randomizeIndex(records)]._id).play();
 			});
 
 			start = start + obj.duration + cueTime;

@@ -5,7 +5,7 @@ this.Exercises.userCanInsert = function(userId, doc) {
 };
 
 this.Exercises.userCanUpdate = function(userId, doc) {
-	return userId && doc.ownerId == userId;
+	return true;
 };
 
 this.Exercises.userCanRemove = function(userId, doc) {

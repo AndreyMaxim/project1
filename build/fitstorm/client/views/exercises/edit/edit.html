@@ -1,0 +1,35 @@
+<template name="EditExercise">
+	<div class="container">
+		<form class="container">
+			<h2> Edit Exercise </h2>
+			<div class="form-group">
+				<label> Exercise: </label>
+				<input name='name' class="form-control" placeholder="Exercise Name" value="{{this.exercise_details.name}}" required />
+			</div>
+			<div class="form-group hidden">
+				<label> Duration/Rep: </label>
+				<input type='number' name="duration" class="form-control" value="{{this.exercise_details.duration}}" id="exercise-duration" required />
+			</div>
+			<div class="form-group">
+				<label> Add new Cue: </label><br/>
+				{{#if isRecording}}
+					<button type="button" class="btn btn-danger" id='record-cue-stop'> Stop Recording </button>
+					<p class="text-lead">Recording ...</p>
+				{{else}}
+					<button type="button" class="btn btn-primary" id='record-cue-start'> Start Recording </button>
+				{{/if}}
+			</div>
+			{{#unless isRecording}}
+				<div class="form-group">
+					<button class="btn btn-success save" type="submit" data-id="{{ getSelectedId }}">
+						<span class="fa fa-check"></span>
+						Save Exercise
+					</button>
+					<button class="btn btn-default" id="form-cancel-button" type="button">
+						Cancel
+					</button>
+				</div>
+			{{/unless}}
+		</form>
+	</div>
+</template>

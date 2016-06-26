@@ -70,12 +70,14 @@ Template.AddExercises.events({
 		var set_exercises 	 = pageSession.get('set_exercises'),
 			action       = pageSession.get('exerciseAction'),
 			selectedExercise = pageSession.get('selectedExercise'),
+			$select         = $('#select-exercise')
 			newExercise  = 
 					{
-						'exercise' : $('#select-exercise').val(),
-						'duration' : parseFloat($('#exercise-duration').val()),
-						'setId'	   : params.setId,
-						'recordId' : pageSession.get('record_id')
+						'exercise'   : $select.val(),
+						'duration'   : parseFloat($('#exercise-duration').val()),
+						'setId'	     : params.setId,
+						'recordId'   : pageSession.get('record_id'),
+						'exerciseId' : $select.find("option:selected").data('id')
 					};
 
 		if(action.indexOf('Add') > -1) {

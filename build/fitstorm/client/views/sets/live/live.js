@@ -29,7 +29,8 @@ Template.SetsLive.rendered = function() {
 			});
 
 		popcorn.cue(start, function() {
-			Records.findOne(obj.recordId).play();
+			var records = Records.find({exerciseId : obj.exerciseId});
+			Records.findOne(records.fetch()[randomizeIndex(records)]._id).play();
 		});
 
 		start = start + obj.duration + cueTime;
@@ -91,4 +92,9 @@ setCountdownTimer = function(popcorn) {
 	}
 	countdownTimer = getRemainingTime($curExercise.data('ends-at'), currentTime);
 	$durationEl.text('(' + countdownTimer + ' sec)');
+};
+
+randomizeIndex = function(collection)
+{
+	return Math.floor(Math.random() * collection.count());
 };
