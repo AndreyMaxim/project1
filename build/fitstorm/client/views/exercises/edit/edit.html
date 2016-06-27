@@ -11,13 +11,27 @@
 				<input type='number' name="duration" class="form-control" value="{{this.exercise_details.duration}}" id="exercise-duration" required />
 			</div>
 			<div class="form-group">
-				<label> Add new Cue: </label><br/>
+				<label> Record new Cue: </label><br/>
 				{{#if isRecording}}
 					<button type="button" class="btn btn-danger" id='record-cue-stop'> Stop Recording </button>
 					<p class="text-lead">Recording ...</p>
 				{{else}}
 					<button type="button" class="btn btn-primary" id='record-cue-start'> Start Recording </button>
 				{{/if}}
+			</div>
+			<p> OR </p>
+			<div class="form-group field-record-id">
+				<label for="recordId">
+					Upload new Cue (mp3):
+				</label>
+				<div class="input-div">
+					<input type="file" id="field-record-id" class="file" multiple="false" data-show-upload="false" data-show-caption="true" data-field="recordId">
+					<input type="hidden" name="recordId" value="">
+					<span id="help-text" class="help-block">
+					</span>
+					<span id="error-text" class="help-block">
+					</span>
+				</div>
 			</div>
 			{{#unless isRecording}}
 				<div class="form-group">

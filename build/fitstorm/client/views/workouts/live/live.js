@@ -27,8 +27,13 @@ Template.WorkoutsLive.rendered = function() {
 				});
 
 			popcorn[parentIndex].cue(start, function() {
-				var records = Records.find({exerciseId : obj.exerciseId});
-				Records.findOne(records.fetch()[randomizeIndex(records)]._id).play();
+
+				if(song = Songs.findOne({exerciseId: obj.exerciseId})) {
+					var audio = new Audio(song.url());
+					audio.play();
+				}else if(records = Records.find({exerciseId : obj.exerciseId})) {
+					Records.findOne(records.fetch()[randomizeIndex(records)]._id).play();
+				}
 			});
 
 			start = start + obj.duration + cueTime;

@@ -1,8 +1,36 @@
-var pageSession = new ReactiveDict();
+var pageSession = new ReactiveDict(),
+	upload_ids  = [],
+	record_ids  = [];
 
 Template.EditExercise.rendered = function(){
 	pageSession.set('isRecording', false);
-	pageSession.set('record_ids', []);
+	pageSession.set("exercisesInsertInsertFormInfoMessage", "");
+	pageSession.set("exercisesInsertInsertFormErrorMessage", "");
+
+	$(".input-group.date").each(function() {
+		var format = $(this).find("input[type='text']").attr("data-format");
+
+		if(format) {
+			format = format.toLowerCase();
+		}
+		else {
+			format = "mm/dd/yyyy";
+		}
+
+		$(this).datepicker({
+			autoclose: true,
+			todayHighlight: true,
+			todayBtn: true,
+			forceParse: false,
+			keyboardNavigation: false,
+			format: format
+		});
+	});
+
+	$("input[type='file']").fileinput();
+	$("select[data-role='tagsinput']").tagsinput();
+	$(".bootstrap-tagsinput").addClass("form-control");
+	$("input[autofocus]").focus();
 };
 
 Template.EditExercise.helpers({
@@ -18,12 +46,10 @@ Template.EditExercise.events({
 	},
 	"click #record-cue-start": function() {
 		pageSession.set('isRecording', true);
-		var record_ids = pageSession.get('record_ids');
 		if(Records.ready()) {
 			Records.startRecording({},function(err, id) {
 				if(!err) {
 					record_ids.push({id: id});
-					pageSession.set('record_ids', record_ids);
 				}
 			});
 		}
@@ -31,6 +57,23 @@ Template.EditExercise.events({
 	"click #record-cue-stop": function() {
 		pageSession.set('isRecording', false);
 		Records.stopRecording();
+	},
+	"change #field-record-id": function(e, t) {
+		e.preventDefault();
+		var fileInput = $(e.currentTarget);
+		var dataField = fileInput.attr("data-field");
+		var hiddenInput = fileInput.closest("form").find("input[name='" + dataField + "']");
+
+		FS.Utility.eachFile(event, function(file) {
+			Songs.insert(file, function (err, fileObj) {
+				if(err) {
+					console.log(err);
+				} else {
+					upload_ids.push({id: fileObj._id});
+					hiddenInput.val(fileObj._id);
+				}
+			});
+		});
 	},
 	"submit": function(e, t) {
 		e.preventDefault();
@@ -75,7 +118,7 @@ Template.EditExercise.events({
 
 				Exercises.update({ _id: t.data.exercise_details._id }, { $set: values }, function(e) { if(e) errorAction(e); else submitAction(); });
 
-				_.each(pageSession.get('record_ids'), function(record) {
+				_.each(record_ids, function(record) {
 					Records
 						.findOne(record.id)
 						.update({
@@ -83,6 +126,17 @@ Template.EditExercise.events({
 								'exerciseId': t.data.exercise_details._id
 							}
 						});
+				});
+
+				// update uploads
+				_.each(upload_ids, function(upload) {
+					Songs.update({
+						_id: upload.id
+					},{
+						$set: {
+							'exerciseId': t.data.exercise_details._id
+						}
+					});
 				});
 			}
 		);

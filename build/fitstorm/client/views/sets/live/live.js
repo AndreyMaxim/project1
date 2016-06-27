@@ -1,5 +1,6 @@
 var pageSession = new ReactiveDict(),
 	popcorn = null,
+	cuePopcorn = null,
 	cueTime = 2;
 
 Template.SetsLive.rendered = function() {
@@ -29,8 +30,12 @@ Template.SetsLive.rendered = function() {
 			});
 
 		popcorn.cue(start, function() {
-			var records = Records.find({exerciseId : obj.exerciseId});
-			Records.findOne(records.fetch()[randomizeIndex(records)]._id).play();
+			if(song = Songs.findOne({exerciseId: obj.exerciseId})) {
+				var audio = new Audio(song.url());
+				audio.play();
+			}else if(records = Records.find({exerciseId : obj.exerciseId})) {
+				Records.findOne(records.fetch()[randomizeIndex(records)]._id).play();
+			}
 		});
 
 		start = start + obj.duration + cueTime;
