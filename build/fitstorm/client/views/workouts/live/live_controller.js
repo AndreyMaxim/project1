@@ -22,7 +22,6 @@ this.WorkoutsLiveController = RouteController.extend({
 			Meteor.subscribe('set_list'),
 			Meteor.subscribe('exercises_all'),
 			Meteor.subscribe('records'),
-			Meteor.subscribe('songs'),
 		];
 		var ready = true;
 		_.each(subs, function(sub) {
@@ -40,7 +39,6 @@ this.WorkoutsLiveController = RouteController.extend({
 			set_list: Sets.find({}),
 			exercises_all: SetExercises.find({}),
 			records: Records.find({}, {}),
-			songs: Songs.find({}, {})
 		};
 		
 		return data;

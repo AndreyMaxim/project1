@@ -1,6 +1,6 @@
 var pageSession = new ReactiveDict(),
 	record_ids = [],
-	upload_ids = [];
+	song_ids = [];
 
 Template.InsertExercise.rendered = function(){
 	pageSession.set('isRecording', false);
@@ -73,7 +73,7 @@ Template.InsertExercise.events({
 				if(err) {
 					console.log(err);
 				} else {
-					upload_ids.push({id: fileObj._id});
+					song_ids.push(fileObj._id);
 					hiddenInput.val(fileObj._id);
 				}
 			});
@@ -120,6 +120,10 @@ Template.InsertExercise.events({
 			},
 			function(values) {
 
+				if(song_ids.length){
+					values.song_ids = song_ids;
+				}
+				
 				newId = Exercises.insert(values, function(e) { if(e) errorAction(e); else submitAction(); });
 				
 				// update record
@@ -134,15 +138,15 @@ Template.InsertExercise.events({
 				});
 
 				// update uploads
-				_.each(upload_ids, function(upload) {
-					Songs.update({
-						_id: upload.id
-					},{
-						$set: {
-							'exerciseId': newId
-						}
-					});
-				});
+				// _.each(song_ids, function(id) {
+				// 	Songs.update({
+				// 		_id: id
+				// 	},{
+				// 		$set: {
+				// 			'exerciseId': newId
+				// 		}
+				// 	});
+				// });
 
 			}
 		);

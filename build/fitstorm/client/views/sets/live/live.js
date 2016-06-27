@@ -7,8 +7,9 @@ Template.SetsLive.rendered = function() {
 	var set_details = this.data.set_details,
 		audio = Songs.findOne({ _id: set_details.songId}),
 		start = 1;
-
-	pageSession.set('setAudio', audio ? audio.url() : null );
+		
+	console.log(audio, audio.url());
+	pageSession.set('setAudio', audio.url() );
 	pageSession.set('setExercises', set_details.set_exercises_joined);
 	pageSession.set('set_details', set_details);
 
@@ -30,12 +31,17 @@ Template.SetsLive.rendered = function() {
 			});
 
 		popcorn.cue(start, function() {
-			if(song = Songs.findOne({exerciseId: obj.exerciseId})) {
-				var audio = new Audio(song.url());
-				audio.play();
-			}else if(records = Records.find({exerciseId : obj.exerciseId})) {
-				Records.findOne(records.fetch()[randomizeIndex(records)]._id).play();
+			var song = Songs.findOne({exerciseId: obj.exerciseId});
+			if(song){
+				var aud = new Audio(song.url());
+				aud.play();
 			}
+			// if(song = Songs.findOne({exerciseId: obj.exerciseId})) {
+			// 	var aud = new Audio(song.url());
+			// 	aud.play();
+			// }else if(records = Records.find({exerciseId : obj.exerciseId})) {
+			// 	Records.findOne(records.fetch()[randomizeIndex(records)]._id).play();
+			// }
 		});
 
 		start = start + obj.duration + cueTime;
