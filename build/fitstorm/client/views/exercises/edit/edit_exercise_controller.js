@@ -21,7 +21,7 @@ this.EditExerciseController = RouteController.extend({
 		var subs = [
 			Meteor.subscribe('exercise_details', this.params.exerciseId),
 			Meteor.subscribe('records'),
-			// Meteor.subscribe('songs')
+			Meteor.subscribe('song_list')
 		];
 		var ready = true;
 		_.each(subs, function(sub) {
@@ -37,8 +37,7 @@ this.EditExerciseController = RouteController.extend({
 		var data = {
 			params: this.params || {},
 			exercise_details: Exercises.findOne({_id: this.params.exerciseId}, {}),
-			records: Records.find({}, {}),
-			// songs: Songs.find({}, {})
+			records: Records.find({}, {})
 		};
 		
 		return data;

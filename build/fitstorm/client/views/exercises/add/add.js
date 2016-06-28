@@ -1,13 +1,13 @@
 var pageSession = new ReactiveDict(),
 	record_ids = [],
-	song_ids = [];
+	song_ids;
 
 Template.InsertExercise.rendered = function(){
 	pageSession.set('isRecording', false);
-
 	pageSession.set("exercisesInsertInsertFormInfoMessage", "");
 	pageSession.set("exercisesInsertInsertFormErrorMessage", "");
-
+	song_ids = [];
+	
 	$(".input-group.date").each(function() {
 		var format = $(this).find("input[type='text']").attr("data-format");
 
@@ -62,11 +62,11 @@ Template.InsertExercise.events({
 		pageSession.set('isRecording', false);
 		Records.stopRecording();
 	},
-	"change #field-record-id": function(e, t) {
+	"change #field-song-id": function(e, t) {
 		e.preventDefault();
 		var fileInput = $(e.currentTarget);
 		var dataField = fileInput.attr("data-field");
-		var hiddenInput = fileInput.closest("form").find("input[name='" + dataField + "']");
+		var hiddenInput = fileInput.closest("form").find("input[name='" + dataField + "s']");
 
 		FS.Utility.eachFile(event, function(file) {
 			Songs.insert(file, function (err, fileObj) {
@@ -120,9 +120,9 @@ Template.InsertExercise.events({
 			},
 			function(values) {
 
-				if(song_ids.length){
-					values.song_ids = song_ids;
-				}
+				// if(song_ids.length){
+				// 	values.songIds = song_ids;
+				// }
 				
 				newId = Exercises.insert(values, function(e) { if(e) errorAction(e); else submitAction(); });
 				
@@ -138,15 +138,15 @@ Template.InsertExercise.events({
 				});
 
 				// update uploads
-				// _.each(song_ids, function(id) {
-				// 	Songs.update({
-				// 		_id: id
-				// 	},{
-				// 		$set: {
-				// 			'exerciseId': newId
-				// 		}
-				// 	});
-				// });
+				_.each(song_ids, function(id) {
+					Songs.update({
+						_id: id
+					},{
+						$set: {
+							'exerciseId': newId
+						}
+					});
+				});
 
 			}
 		);

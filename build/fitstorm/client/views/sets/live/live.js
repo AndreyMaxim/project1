@@ -35,6 +35,7 @@ Template.SetsLive.rendered = function() {
 			if(song){
 				var aud = new Audio(song.url());
 				aud.play();
+				console.log('play!');
 			}
 			// if(song = Songs.findOne({exerciseId: obj.exerciseId})) {
 			// 	var aud = new Audio(song.url());

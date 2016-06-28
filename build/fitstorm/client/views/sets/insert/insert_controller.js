@@ -22,7 +22,7 @@ this.SetsInsertController = RouteController.extend({
 			Meteor.subscribe("sets_empty"),
 			Meteor.subscribe("set_list"),
 			Meteor.subscribe("exercises"),
-			Meteor.subscribe("records")
+			Meteor.subscribe("records"),
 		];
 		var ready = true;
 		_.each(subs, function(sub) {

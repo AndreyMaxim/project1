@@ -21,7 +21,7 @@ this.SetsDetailsInsertController = RouteController.extend({
 
 		var subs = [
 			Meteor.subscribe("exercises_empty"),
-			Meteor.subscribe("set_details", this.params.setId)
+			Meteor.subscribe("set_details", this.params.setId),
 		];
 		var ready = true;
 		_.each(subs, function(sub) {
