@@ -8,7 +8,6 @@ Template.SetsLive.rendered = function() {
 		audio = Songs.findOne({ _id: set_details.songId}),
 		start = 1;
 		
-	console.log(audio, audio.url());
 	pageSession.set('setAudio', audio.url() );
 	pageSession.set('setExercises', set_details.set_exercises_joined);
 	pageSession.set('set_details', set_details);
@@ -35,7 +34,6 @@ Template.SetsLive.rendered = function() {
 			if(song){
 				var aud = new Audio(song.url());
 				aud.play();
-				console.log('play!');
 			}
 			// if(song = Songs.findOne({exerciseId: obj.exerciseId})) {
 			// 	var aud = new Audio(song.url());

@@ -105,22 +105,30 @@
 					</span>
 				</div>
 			</div>
-
-			<div class="form-group">
-				{{> AddExercises }}
-			</div>
-			<div class="form-group">
-				<div class="submit-div">
-					<button id="form-submit-button" class="btn btn-success" type="submit">
-						<span class="fa fa-check">
-						</span>
-						Save
-					</button>
-					<a href="#" id="form-cancel-button" class="btn btn-default">
-						Cancel
-					</a>
+			{{#if isUploading}}
+				<div class="notification">
+	           		<p class="lead">
+	           			Uploading
+		            	<span class="fa fa-refresh fa-spin"></span>
+	            	</p>
+	          	</div>
+			{{else}}
+				<div class="form-group">
+					{{> AddExercises }}
 				</div>
-			</div>
+				<div class="form-group">
+					<div class="submit-div">
+						<button id="form-submit-button" class="btn btn-success" type="submit">
+							<span class="fa fa-check">
+							</span>
+							Save
+						</button>
+						<a href="#" id="form-cancel-button" class="btn btn-default">
+							Cancel
+						</a>
+					</div>
+				</div>
+			{{/if}}
 		</form>
 	</div>
 </template>

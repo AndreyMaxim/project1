@@ -33,17 +33,26 @@
 					</span>
 				</div>
 			</div>
-			{{#unless isRecording}}
-				<div class="form-group">
-					<button class="btn btn-success save" type="submit" data-id="{{ getSelectedId }}">
-						<span class="fa fa-check"></span>
-						Save Exercise
-					</button>
-					<button class="btn btn-default" id="form-cancel-button" type="button">
-						Cancel
-					</button>
-				</div>
-			{{/unless}}
+			{{#if isUploading}}
+				<div class="notification">
+	           		<p class="lead">
+	           			Uploading
+		            	<span class="fa fa-refresh fa-spin"></span>
+	            	</p>
+	          	</div>
+			{{else}}
+				{{#unless isRecording}}
+					<div class="form-group">
+						<button class="btn btn-success save" type="submit" data-id="{{ getSelectedId }}">
+							<span class="fa fa-check"></span>
+							Save Exercise
+						</button>
+						<button class="btn btn-default" id="form-cancel-button" type="button">
+							Cancel
+						</button>
+					</div>
+				{{/unless}}
+			{{/if}}
 		</form>
 	</div>
 </template>

@@ -6,6 +6,8 @@ Template.InsertExercise.rendered = function(){
 	pageSession.set('isRecording', false);
 	pageSession.set("exercisesInsertInsertFormInfoMessage", "");
 	pageSession.set("exercisesInsertInsertFormErrorMessage", "");
+	pageSession.set('isUploading', false);
+
 	song_ids = [];
 	
 	$(".input-group.date").each(function() {
@@ -37,6 +39,9 @@ Template.InsertExercise.rendered = function(){
 Template.InsertExercise.helpers({
 	"isRecording": function() {
 		return pageSession.get('isRecording');
+	},
+	"isUploading": function() {
+		return pageSession.get('isUploading');
 	}
 });
 
@@ -67,15 +72,15 @@ Template.InsertExercise.events({
 		var fileInput = $(e.currentTarget);
 		var dataField = fileInput.attr("data-field");
 		var hiddenInput = fileInput.closest("form").find("input[name='" + dataField + "s']");
+		pageSession.set('isUploading', true);
 
 		FS.Utility.eachFile(event, function(file) {
 			Songs.insert(file, function (err, fileObj) {
-				if(err) {
-					console.log(err);
-				} else {
-					song_ids.push(fileObj._id);
+				fileObj.once('uploaded', function () {
+					pageSession.set('isUploading', false);
 					hiddenInput.val(fileObj._id);
-				}
+					song_ids.push(fileObj._id);
+			    });
 			});
 		});
 	},

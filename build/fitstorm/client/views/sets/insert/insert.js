@@ -17,6 +17,7 @@ Template.SetsInsertInsertForm.rendered = function() {
 
 	pageSession.set("setsInsertInsertFormInfoMessage", "");
 	pageSession.set("setsInsertInsertFormErrorMessage", "");
+	pageSession.set('isUploading', false);
 	pageSession.set("setType", "AMRAP");
 
 	$(".input-group.date").each(function() {
@@ -128,18 +129,18 @@ Template.SetsInsertInsertForm.events({
 		setSetType(e.target.value);
 	},
 	"change #field-song-id": function(e, t) {
-	e.preventDefault();
-	var fileInput = $(e.currentTarget);
-	var dataField = fileInput.attr("data-field");
-	var hiddenInput = fileInput.closest("form").find("input[name='" + dataField + "']");
-
+		e.preventDefault();
+		var fileInput = $(e.currentTarget);
+		var dataField = fileInput.attr("data-field");
+		var hiddenInput = fileInput.closest("form").find("input[name='" + dataField + "']");
+		pageSession.set('isUploading', true);
+	
 		FS.Utility.eachFile(event, function(file) {
 			Songs.insert(file, function (err, fileObj) {
-				if(err) {
-					console.log(err);
-				} else {
+				fileObj.once('uploaded', function () {
+					pageSession.set('isUploading', false);
 					hiddenInput.val(fileObj._id);
-				}
+			    });
 			});
 		});
 	},
@@ -166,6 +167,9 @@ Template.SetsInsertInsertForm.helpers({
 	},
 	"errorMessage": function() {
 		return pageSession.get("setsInsertInsertFormErrorMessage");
+	},
+	"isUploading": function() {
+		return pageSession.get('isUploading');
 	},
 	"amrapCustomClass":function() {
 		var setType = pageSession.get('setType'),

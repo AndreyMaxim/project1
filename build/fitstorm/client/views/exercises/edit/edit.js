@@ -4,6 +4,7 @@ var pageSession = new ReactiveDict(),
 
 Template.EditExercise.rendered = function(){
 	pageSession.set('isRecording', false);
+	pageSession.set('isUploading', false);
 	pageSession.set("exercisesInsertInsertFormInfoMessage", "");
 	pageSession.set("exercisesInsertInsertFormErrorMessage", "");
 	song_ids = [];
@@ -37,6 +38,9 @@ Template.EditExercise.rendered = function(){
 Template.EditExercise.helpers({
 	"isRecording": function() {
 		return pageSession.get('isRecording');
+	},
+	"isUploading": function() {
+		return pageSession.get('isUploading');
 	}
 });
 
@@ -64,15 +68,15 @@ Template.EditExercise.events({
 		var fileInput = $(e.currentTarget);
 		var dataField = fileInput.attr("data-field");
 		var hiddenInput = fileInput.closest("form").find("input[name='" + dataField + "s']");
+		pageSession.set('isUploading', true);
 
 		FS.Utility.eachFile(event, function(file) {
 			Songs.insert(file, function (err, fileObj) {
-				if(err) {
-					console.log(err);
-				} else {
+				fileObj.once('uploaded', function () {
+					pageSession.set('isUploading', false);
 					song_ids.push(fileObj._id);
 					hiddenInput.val(fileObj._id);
-				}
+			    });
 			});
 		});
 	},
