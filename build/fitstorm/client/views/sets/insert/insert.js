@@ -128,6 +128,9 @@ Template.SetsInsertInsertForm.events({
 		pageSession.set("setType", e.target.value);
 		setSetType(e.target.value);
 	},
+	"click .fileinput-remove-button": function(){
+		pageSession.set('isUploading', false);
+	},
 	"change #field-song-id": function(e, t) {
 		e.preventDefault();
 		var fileInput = $(e.currentTarget);
