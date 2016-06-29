@@ -45,8 +45,14 @@
 				</label>
 				<div class="input-div">
 					<select class="setType-field form-control" name="type" value="{{set_details.type}}">
-					<option value="AMRAP" {{optionIsSelected set_details.type "AMRAP"}}> AMRAP </option>
-						<option value="Interval" {{optionIsSelected set_details.type "Interval"}}> Interval </option>
+						<option value="AMRAP" {{optionIsSelected set_details.type "AMRAP"}}> AMRAP </option>
+						<!-- <option value="Interval" {{optionIsSelected set_details.type "Interval"}}> Interval </option> -->
+						<option value="RSFT" {{optionIsSelected set_details.type "RSFT"}}> RFT/SFT </option>
+						<optgroup label="Interval">
+							<option value="EMOM" {{optionIsSelected set_details.type "EMOM"}}> EMOM </option>
+							<option value="Tabata" {{optionIsSelected set_details.type "Tabata"}}> Tabata </option>
+							<option value="Interval" {{optionIsSelected set_details.type "Interval"}}> Custom </option>
+						</optgroup>
 					</select>
 					<span id="help-text" class="help-block"></span>
 					<span id="error-text" class="help-block"></span>

@@ -16,7 +16,7 @@
 		<div class="row text-center set-exercises-wrapper pre-scrollable">
 			{{#each setDetail.set_exercises_joined}}
 				<p class='set-exercise-item' id="order-{{@index}}" data-duration="{{duration}}" data-ends-at="{{endsAt this.setId @index}}"> {{ exercise }}
-					<span class="duration-wrapper"> ({{duration}} sec)</span>
+					<span class="duration-wrapper"> ({{duration}})</span>
 				</p>
 			{{/each}}
 		</div>

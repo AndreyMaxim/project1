@@ -45,12 +45,15 @@ Template.AddExercises.helpers({
 		return exercises;
 	},
 	"getDurationValue" : function(){
-		action = pageSession.get('exerciseAction'); 
-		if(action && action.indexOf('Edit') > -1){
-			return getValue(pageSession.get('selectedExercise'), 'duration');
-		}else{
-			return 30;
+		action = pageSession.get('exerciseAction');
+		setType = pageSession.get('setType');
+		duration = 30;
+		if(action && action.indexOf('Edit') > -1) {
+			duration = getValue(pageSession.get('selectedExercise'), 'duration');
+		}else if(setType && setType.indexOf('EMOM') > -1) {
+			duration = 60;
 		}
+		return duration;
 	},
 	"getLabel" : function(){
 		var setType = pageSession.get('setType');
@@ -61,6 +64,10 @@ Template.AddExercises.helpers({
 	},
 	"isRecording": function(){
 		return pageSession.get('isRecording');
+	},
+	"isReadOnly": function() {
+		setType = pageSession.get('setType');
+		return (setType && setType.indexOf('EMOM') > -1);
 	}
 });
 

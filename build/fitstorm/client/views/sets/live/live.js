@@ -101,7 +101,7 @@ setCountdownTimer = function(popcorn) {
 		currentTime -= cueTime;
 	}
 	countdownTimer = getRemainingTime($curExercise.data('ends-at'), currentTime);
-	$durationEl.text('(' + countdownTimer + ' sec)');
+	$durationEl.text('(' + countdownTimer + ')');
 };
 
 randomizeIndex = function(collection)
