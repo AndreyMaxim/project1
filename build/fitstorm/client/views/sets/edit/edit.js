@@ -151,8 +151,14 @@ Template.SetsEditEditForm.helpers({
 	"intervalCustomClass": function(){
 		var setType = pageSession.get('setType'),
 			customClass = 'hidden';
-		if(setType && setType.indexOf('Interval') > -1) {
-			customClass = '';
+		
+		if(setType) {
+			needsAudioUpload = setType.indexOf('Interval') > -1 || 
+							   setType.indexOf('EMOM') > -1 ||
+							   setType.indexOf('Tabata') > -1;
+
+			if(needsAudioUpload) customClass = '';
+			
 		}
 		return customClass;
 	},

@@ -14,9 +14,9 @@
 					</select>
 					<input type="hidden" value="{{exerciseId}}" />	
 				</div>
-				<div class="form-group">
+				<div class="form-group {{#if isReadOnly }} hidden {{/if}}">
 					<label> {{ getLabel }}: </label>
-					<input type='number' value="{{ getDurationValue }}" class="form-control" id="exercise-duration"/>
+					<input type='number' value="{{ getDurationValue }}" class="form-control" id="exercise-duration" readonly="{{isReadOnly}}"/>
 				</div>
 				<div class="form-group hidden">
 					<label> Cue: </label>
