@@ -9,7 +9,7 @@ Template.WorkoutsLive.rendered = function() {
 	{
 		start = 1;
 		popcorn[parentIndex] = Popcorn('#setAudio-'+parentObj._id);
-				
+		setPageSession('setExercises' + parentObj._id, parentObj.set_exercises_joined);
 		_.each(parentObj.set_exercises_joined, function(obj, index)
 		{
 			target = "ws-"+obj._id;
@@ -76,7 +76,7 @@ Template.registerHelper('getWorkoutSets', function (workout) {
 		{$in: _.pluck(workout.sets, '_id')}},
 		{transform: function(doc){
 			setExercises = SetExercises.find({setId: doc._id}).fetch();
-			doc.set_exercises_joined = isTabata(doc.type) ? setTabataExercises(setExercises) : setExercises;
+			doc.set_exercises_joined = isTabata(doc.type) ? setTabataExercises(setExercises, doc._id) : setExercises;
 			return doc;
 		}}).fetch();
 	pageSession.set('sets', sets);
