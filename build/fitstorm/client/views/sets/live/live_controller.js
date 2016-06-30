@@ -22,7 +22,8 @@ this.SetsLiveController = RouteController.extend({
 			Meteor.subscribe('set_details', this.params.setId),
 			Meteor.subscribe('set_exercises', this.params.setId),
 			Meteor.subscribe('records'),
-			Meteor.subscribe('song_list')
+			Meteor.subscribe('song_list'),
+			Meteor.subscribe('exercises')
 		];
 		var ready = true;
 		_.each(subs, function(sub) {
