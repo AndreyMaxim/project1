@@ -6,15 +6,16 @@ var pageSession = new ReactiveDict(),
 Template.SetsLive.rendered = function() {
 	var set_details = this.data.set_details,
 		audio = Songs.findOne({ _id: set_details.songId}),
+		setExercises = isTabata(set_details.type) ? setTabataExercises(set_details.set_exercises_joined) : set_details.set_exercises_joined,
 		start = 1;
-		
+	
 	pageSession.set('setAudio', audio.url() );
-	pageSession.set('setExercises', set_details.set_exercises_joined);
+	pageSession.set('setExercises', setExercises);
 	pageSession.set('set_details', set_details);
 
 	popcorn = Popcorn('#setAudio');
 	
-	_.each(set_details.set_exercises_joined, function(obj, index) {
+	_.each(setExercises, function(obj, index) {
 		target = 'order-' + index;
 		playTime = start + cueTime;
 		endPlayTime = playTime + obj.duration;
@@ -60,7 +61,7 @@ Template.SetsLive.helpers({
 	audioSource : function() {
 		return pageSession.get('setAudio');
 	},
-	exercises : function(){
+	getSetExercises : function(){
 		return pageSession.get('setExercises');
 	},
 	setDetail: function(){
@@ -69,8 +70,9 @@ Template.SetsLive.helpers({
 });
 
 Template.registerHelper('endsAt', function (setId, idx) {
-	var sum_duration = 1;
-	SetExercises.find({setId: setId}).fetch().map(function(exercise, index) {
+	var sum_duration = 1,
+		setExercises = pageSession.get('setExercises');
+	_.map(setExercises, function(exercise, index) {
 		if(index <= idx) {
 			sum_duration = sum_duration + exercise.duration + cueTime;
 		}
@@ -107,4 +109,21 @@ setCountdownTimer = function(popcorn) {
 randomizeIndex = function(collection)
 {
 	return Math.floor(Math.random() * collection.count());
+};
+
+isTabata = function(type){
+	return (type.indexOf('Tabata') > -1);
+};
+
+setTabataExercises = function(setExercises) {
+	var setExercisesTemp = [];
+	var index = 0;
+	for(var i = 1; i <= setExercises.length * 2; i ++) {
+		if(i % 2 == 0) {
+			setExercisesTemp.push({_id: _.uniqueId('rest_'), exercise: 'Rest', duration: 10, exerciseId: -1});
+		}else {
+			setExercisesTemp.push(setExercises[index++]);
+		}
+	}
+	return setExercisesTemp;
 };

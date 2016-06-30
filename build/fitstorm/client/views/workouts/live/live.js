@@ -1,6 +1,6 @@
 var pageSession = new ReactiveDict(),
 	popcorn     = [],
-	cueTime 	= 3;
+	cueTime 	= 2;
 
 Template.WorkoutsLive.rendered = function() {
 	var sets = pageSession.get('sets');
@@ -9,8 +9,8 @@ Template.WorkoutsLive.rendered = function() {
 	{
 		start = 1;
 		popcorn[parentIndex] = Popcorn('#setAudio-'+parentObj._id);
-
-		_.each(parentObj.set_exercises_joined, function(obj, index) 
+				
+		_.each(parentObj.set_exercises_joined, function(obj, index)
 		{
 			target = "ws-"+obj._id;
 			playTime = start + cueTime;
@@ -75,7 +75,8 @@ Template.registerHelper('getWorkoutSets', function (workout) {
 	var sets = Sets.find({_id:
 		{$in: _.pluck(workout.sets, '_id')}},
 		{transform: function(doc){
-			doc.set_exercises_joined = SetExercises.find({setId: doc._id}).fetch();
+			setExercises = SetExercises.find({setId: doc._id}).fetch();
+			doc.set_exercises_joined = isTabata(doc.type) ? setTabataExercises(setExercises) : setExercises;
 			return doc;
 		}}).fetch();
 	pageSession.set('sets', sets);
