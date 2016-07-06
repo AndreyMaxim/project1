@@ -63,7 +63,7 @@ Template.EditExercise.events({
 		pageSession.set('isRecording', false);
 		Records.stopRecording();
 	},
-	"change #field-record-id": function(e, t) {
+	"change #field-song-id": function(e, t) {
 		e.preventDefault();
 		var fileInput = $(e.currentTarget);
 		var dataField = fileInput.attr("data-field");

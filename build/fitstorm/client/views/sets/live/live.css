@@ -1,0 +1,25 @@
+.no-style {
+	list-style: none;
+}
+.timer-wrapper {
+	font-size: 2em;
+}
+.active-exercise {
+	font-size: 2em;
+	color: #7f0000;
+}
+.blink {
+  animation: blink-animation 1s steps(5, start) infinite;
+  -webkit-animation: blink-animation 1s steps(5, start) infinite;
+  color: #7f0000;
+}
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}

@@ -11,8 +11,6 @@ Template.AddExercises.rendered = function() {
 		set_exercises = this.data.set_exercises.fetch();
 		set = Sets.findOne(params.setId);
 		pageSession.set('setType', set.type);
-	}else{
-		pageSession.set('setType', 'AMRAP');
 	}
 
 	exercises = Exercises.find().fetch();

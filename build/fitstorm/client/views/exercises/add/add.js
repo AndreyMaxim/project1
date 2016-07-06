@@ -78,8 +78,8 @@ Template.InsertExercise.events({
 			Songs.insert(file, function (err, fileObj) {
 				fileObj.once('uploaded', function () {
 					pageSession.set('isUploading', false);
-					hiddenInput.val(fileObj._id);
 					song_ids.push(fileObj._id);
+					hiddenInput.val(fileObj._id);
 			    });
 			});
 		});
