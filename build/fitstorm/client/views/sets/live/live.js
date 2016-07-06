@@ -108,6 +108,7 @@ Template.SetsLive.created = function(){
 
 Template.SetsLive.onDestroyed(function () {
 	// reset all
+	popcorn.destroy();
     Meteor.clearInterval(this.interval);
     popcorn = null;
 	cuePopcorn = null;
