@@ -14,7 +14,7 @@ Template.SetsLive.rendered = function() {
 		setExercises = isTabata(set_details.type) ? setTabataExercises(set_details.set_exercises_joined,set_details._id) : set_details.set_exercises_joined,
 		start = 1;
 	
-	pageSession.set('setAudio', song.url() );
+	pageSession.set('setAudio', song ? song.url() : null );
 	pageSession.set('setExercises' + set_details._id, setExercises);
 	pageSession.set('set_details', set_details);
 	pageSession.set('hasSetStarted', false);
