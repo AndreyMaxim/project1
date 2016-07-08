@@ -1,5 +1,5 @@
 application:
-  title: FitStorm
+  title: SmashBeats
   theme: bootswatch-paper
   collections:
     - name: songs
@@ -228,7 +228,7 @@ application:
         title: ''
         components:
           - name: home_jumbotron
-            title: FitStorm
+            title: SmashBeats
             type: jumbotron
             button_title: 'Login &raquo;'
             button_route: login
@@ -263,7 +263,7 @@ application:
     pages:
       - name: home_private
         title: 'Welcome {{userFullName}}!'
-        text: This is FitStorm an app for you to create and search workouts.
+        text: This is SmashBeats an app for you to create and search workouts.
       - name: workouts
         components:
           - name: view
