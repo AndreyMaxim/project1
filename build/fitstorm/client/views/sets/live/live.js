@@ -26,15 +26,15 @@ Template.SetsLive.rendered = function() {
 	popcorn = Popcorn( wrapper ); //Popcorn('#setAudio');
 
 	_.each(setExercises, function(obj, index) {
-		target = 'order-' + index;
-		playTime = start;
-		endPlayTime = playTime + obj.duration;
+		target = 'set-exercise-item-' + obj._id;
+		playTime = start - allowanceTime;
+		endPlayTime = playTime + obj.duration - allowanceTime;
 		isLastItem = (index == setExercises.length-1);
 		
 		popcorn
 			.footnote({
-				start : playTime - allowanceTime,
-				end   : endPlayTime - allowanceTime,
+				start : playTime,
+				end   : endPlayTime,
 				text  : '',
 				target: target,
 				effect: 'applyclass',
@@ -42,11 +42,17 @@ Template.SetsLive.rendered = function() {
 			});
 		
 		countdownTimers.push({isCue: false, duration: obj.duration});
-		if(!isLastItem) 
+		if(!isLastItem){
 			countdownTimers.push({isCue: true, duration: cueTime});
+		}
+
+		popcorn.cue(endPlayTime - 0.5, function() {
+			$('.active-exercise').fadeOut('slow').delay(1000);
+		});
 
 		start = start + obj.duration + cueTime;
 	});
+
 	setCue(countdownTimers, setExercises);
 	createAudioElement();
 };
@@ -255,7 +261,7 @@ createAudioElement = function(){
 	canvas.addEventListener('click', function(e) {
 	  this.classList.toggle('playing');
 	  if (this.classList.contains('playing')) {
-	    drawPauseButton(STROKE_AND_FILL);
+	    // drawPauseButton(STROKE_AND_FILL);
 	    audio.play();
 	    if(init) audio.pause();
 	    init = false;
