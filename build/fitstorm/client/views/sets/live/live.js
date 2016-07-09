@@ -124,6 +124,12 @@ Template.SetsLive.onDestroyed(function () {
 	$('#audio-item').find('audio').remove();
 });
 
+Template.SetsLive.events({
+	"click #go-back": function(){
+		history.back();
+	}
+});
+
 randomizeIndex = function(collection)
 {
 	return Math.floor(Math.random() * collection.count());

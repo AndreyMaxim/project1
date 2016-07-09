@@ -6,38 +6,17 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
-	    	<div class="col-xs-12 tabbable tabs-left text-center">
-		        <ul class="nav nav-tabs col-xs-3 col-md-offset-1">
-		        	<h4> Sets </h4>
-		        	{{#each getWorkoutSets this.workout_details}}
-			        	<li class="{{isActive @index}}">
-		        			<a href="#{{_id}}" data-toggle="tab"> {{setName}} </a>
-			        	</li>
-		        	{{/each}}
-		        </ul>
-		        <div class="tab-content col-xs-7">
-			        {{#each getWorkoutSets this.workout_details}}
-			        	<div class="tab-pane {{isActive @index}}" id="{{_id}}">
-			        		<h4> {{setName}} </h4>
-							<div>
-								<audio id='setAudio-{{_id}}' controls>
-								  <source src="{{getAudioSource this}}" type="audio/mpeg">
-									Your browser does not support the audio element.
-								</audio>
-							</div>
-							<div class="set-exercises-wrapper">
-								{{#each set_exercises_joined }}
-									<p class='set-exercise-item' id="ws-{{_id}}" data-duration="{{duration}}" data-ends-at="{{endsAt this.setId @index}}"> {{ exercise }}
-										<span class="duration-wrapper"> ({{duration}})</span>
-									</p>
-								{{/each}}
-							</div>
-						</div>
-			        {{/each}}
-		        </div>
-	      	</div>	      
-	    </div>
+		<div class="row text-center">
+			<h2> Workout Sets </h2>
+		    <ul class="list-group">
+		    	{{#each getWorkoutSets this.workout_details}}
+					<li class="list-group-item">
+				    	<span class="badge"> Duration: {{setDuration}}s </span>
+					    <a class="btn-link" href="{{pathFor 'sets.live' setId=_id}}"> {{setName}} </a>
+				  	</li>
+		    	{{/each}}
+			</ul>
+		</div>
 	</div>
 </template>
 

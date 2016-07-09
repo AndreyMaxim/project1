@@ -2,18 +2,20 @@
 	<div class="page-container container" id="content">
 		<div class="row" id="title_row">
 			<div class="col-md-12">
+				<button class="btn btn-default" id="go-back">
+					<span class="fa fa-chevron-left"></span>
+				</button>
+			</div>
+			<div class="col-md-12">
 				<h3 class='text-center'> {{ setDetail.setName }} </h3>
 			</div>
 		</div>
 		<div class="row">
 			<div class="text-center">
-				
 				<div id="setAudio"></div>
-
 				<div class='audio-wrapper'>
 					<audio preload="auto" id="audio-item"></audio>
 				</div>
-
 				{{#if isPlaying}}
 					<div class="row">
 						<p class="timer-wrapper {{timerClass}}"> 
