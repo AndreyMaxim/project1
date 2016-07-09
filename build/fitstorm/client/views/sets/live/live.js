@@ -328,16 +328,6 @@ createAudioElement = function(){
 	  ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 	  ctx.fillStyle = '#F6D565';
 	  ctx.lineCap = 'round';
-
-	  ctx2.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-	  ctx2.fillStyle = '#3A5E8C';
-	  ctx2.lineCap = 'round';
-
-	  for (var i = 0; i < numBars; ++i) {
-	    var magnitude = freqByteData[i + OFFSET];
-	    ctx.fillRect(i * SPACER_WIDTH, CANVAS_HEIGHT, BAR_WIDTH, -magnitude);
-	    ctx2.fillRect(i * SPACER_WIDTH, CANVAS_HEIGHT, BAR_WIDTH, -magnitude);
-	  }
 	}
 
 	function onLoad(e) {
