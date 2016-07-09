@@ -31,14 +31,14 @@ Meteor.startup(function() {
 	
 	if(Exercises.find().fetch().length == 0) {
 		var exercises = [
-			{name: 'Push-up'},
-			{name: 'Crunch'},
-			{name: 'Rest'},
-			{name: 'Squat'},
-			{name: 'Cluster Squat'},
-			{name: 'Burpee'},
-			{name: 'Jump Squat'},
-			{name: 'Sit-up'}
+			{name: 'Push-up', default_cue: 'https://soundcloud.com/jeff-groom/push-ups/s-ghgcV'},
+			{name: 'Crunch', default_cue: 'https://soundcloud.com/jeff-groom/crunches/s-aL2ZD'},
+			{name: 'Squat', default_cue: 'https://soundcloud.com/jeff-groom/squats/s-mU6hC'},
+			{name: 'Cluster Squat', default_cue: 'https://soundcloud.com/jeff-groom/cluster-squats/s-1Orqz'},
+			{name: 'Cluster Push-ups', default_cue: 'https://soundcloud.com/jeff-groom/cluster-push-ups/s-0NZts'},
+			{name: 'Burpee', default_cue: 'https://soundcloud.com/jeff-groom/burpees/s-B9vLC'},
+			{name: 'Jump Squat', default_cue: null},
+			{name: 'Sit-up', default_cue: null}
 		];
 		exercises.forEach(function(exercise){
 			exercise.duration = 30;

@@ -1,11 +1,12 @@
 var pageSession = new ReactiveDict(),
 	popcorn = null,
-	cuePopcorn = null,
+	cuePopcorn = [],
 	cueTime = 3,
 	countdownTimers = [{isCue: true, duration: cueTime}],
 	countdownTimerIndex = 0,
 	allowanceTime = 0.1,
 	init = true,
+	isCuePlayed = false,
 	audio = null;
 
 Template.SetsLive.rendered = function() {
@@ -19,7 +20,6 @@ Template.SetsLive.rendered = function() {
 	pageSession.set('set_details', set_details);
 	pageSession.set('hasSetStarted', false);
 	pageSession.set('isPlaying', false);
-	pageSession.set('isCue', true);
 
 	var wrapper = Popcorn.HTMLNullVideoElement("#setAudio");
 	wrapper.src = "#t=,"+(this.data.set_details.setDuration*2);
@@ -42,7 +42,7 @@ Template.SetsLive.rendered = function() {
 			});
 		
 		countdownTimers.push({isCue: false, duration: obj.duration});
-		if(!isLastItem){
+		if(!isLastItem) {
 			countdownTimers.push({isCue: true, duration: cueTime});
 		}
 
@@ -93,17 +93,21 @@ Template.SetsLive.created = function(){
 	    			pageSession.set('hasSetStarted', true);
 	    			popcorn.currentTime(1);
 		    		popcorn.play();
-		    		audio.play();
+		    		if(pageSession.get('setAudio')) {
+			    		audio.play();
+		    		}
 	    		}
+	    		isCuePlayed = false;
 	    		pageSession.set('isCue', remainingTimer.isCue);
 	    	}else {
 			    Meteor.clearInterval(this.interval);
 	    	}
-	    }else if(remaining === -1) {
+	    }else if(remaining < 0) {
 	    	self.remaining.set(0);
-	    }else if(remaining == 2) {
-	    	playCue(countdownTimers[countdownTimerIndex]);
 	    }
+    }
+    if(pageSession.get('isCue') && !isCuePlayed) {
+    	playCue(countdownTimers[countdownTimerIndex]);
     }
   }, 1000);
 };
@@ -113,14 +117,15 @@ Template.SetsLive.onDestroyed(function () {
 	popcorn.destroy();
     Meteor.clearInterval(this.interval);
     popcorn = null;
-	cuePopcorn = null;
-	cueTime = 3;
+    cuePopcorn = [];
 	countdownTimers = [{isCue: true, duration: cueTime}];
 	countdownTimerIndex = 0;
 	allowanceTime = 0.1;
 	init = true;
 	audio = null;
+	isCuePlayed = false;
 	pageSession.set('isPlaying', false);
+	pageSession.set('isCue', false);
 	$('#audio-item').find('audio').remove();
 });
 
@@ -170,17 +175,28 @@ handleAudio = function(hasSetStarted, isPlaying) {
 playCue = function(obj) {
 	if(obj.isCue && obj.exerciseId) {
 		if(song = Songs.findOne({exerciseId: obj.exerciseId})) {
-			// var aud = new Audio(song.url());
-			// aud.play();
+			var aud = new Audio(song.url());
+			aud.play();
+		}else if(obj.default_cue) {
+		 	var cuePopcornIndex = countdownTimerIndex > 0 ? countdownTimerIndex/2 : 0;
+		 	cuePopcorn[cuePopcornIndex].play();
 		}
 	}
+	isCuePlayed = true;
 }
 
 setCue = function(countdowns, setExercises){
 	var indxs = 0;
 	_.each(countdowns, function(obj, index) {
-		if(obj.isCue && indxs < setExercises.length-1) {
-			countdownTimers[index].exerciseId = setExercises[indxs].exerciseId;
+		if(obj.isCue && indxs < setExercises.length) {
+			exerciseId = setExercises[indxs].exerciseId;
+			countdownTimers[index].exerciseId = exerciseId;
+			if(exercise = Exercises.findOne(exerciseId)) {
+				countdownTimers[index].default_cue = exercise.default_cue;
+				var cuePopcornWrapper = Popcorn.HTMLSoundCloudAudioElement("#cueAudio");
+		 		cuePopcornWrapper.src = obj.default_cue;
+		 		cuePopcorn.push(Popcorn(cuePopcornWrapper));
+			}
 			indxs ++;
 		}
 	});
@@ -268,8 +284,12 @@ createAudioElement = function(){
 	  this.classList.toggle('playing');
 	  if (this.classList.contains('playing')) {
 	    // drawPauseButton(STROKE_AND_FILL);
-	    audio.play();
-	    if(init) audio.pause();
+	    if(pageSession.get('setAudio'))
+	    {
+		    audio.play();
+		    if(init) audio.pause();
+		}
+		pageSession.set('isCue', true);
 	    init = false;
 	    handleAudio(pageSession.get('hasSetStarted'), pageSession.get('isPlaying'));
 	  } else {

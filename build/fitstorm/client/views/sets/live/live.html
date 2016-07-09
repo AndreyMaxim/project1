@@ -12,10 +12,16 @@
 		</div>
 		<div class="row">
 			<div class="text-center">
+				<!-- popcorn js target | used div to allow popcorn to play even w/out audio uploaded-->
 				<div id="setAudio"></div>
+				<div id="cueAudio" style="display: none;"></div>
+
+				<!-- Audio Wrapper -->
 				<div class='audio-wrapper'>
 					<audio preload="auto" id="audio-item"></audio>
 				</div>
+				
+				<!-- Controls -->
 				{{#if isPlaying}}
 					<div class="row">
 						<p class="timer-wrapper {{timerClass}}"> 
@@ -40,4 +46,6 @@
 		</div>
 	</div>
 </template>
+
+
 
