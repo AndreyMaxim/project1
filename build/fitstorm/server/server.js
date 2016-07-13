@@ -31,14 +31,31 @@ Meteor.startup(function() {
 	
 	if(Exercises.find().fetch().length == 0) {
 		var exercises = [
-			{name: 'Push-up', default_cue: 'https://soundcloud.com/jeff-groom/push-ups/s-ghgcV'},
-			{name: 'Crunch', default_cue: 'https://soundcloud.com/jeff-groom/crunches/s-aL2ZD'},
-			{name: 'Squat', default_cue: 'https://soundcloud.com/jeff-groom/squats/s-mU6hC'},
-			{name: 'Cluster Squat', default_cue: 'https://soundcloud.com/jeff-groom/cluster-squats/s-1Orqz'},
-			{name: 'Cluster Push-ups', default_cue: 'https://soundcloud.com/jeff-groom/cluster-push-ups/s-0NZts'},
-			{name: 'Burpee', default_cue: 'https://soundcloud.com/jeff-groom/burpees/s-B9vLC'},
-			{name: 'Jump Squat', default_cue: null},
-			{name: 'Sit-up', default_cue: null}
+			{name: "Push ups", default_cue: Meteor.absoluteUrl() + "cues/Pushups3.wav"},
+			{name: "Cluster Push ups", default_cue: Meteor.absoluteUrl() + "cues/Cluster Pushups2.wav"},
+			{name: "Squats", default_cue: Meteor.absoluteUrl() + "cues/Squats2.wav"},
+			{name: "Cluster Squats", default_cue: Meteor.absoluteUrl() + "cues/Cluster Squats1.wav"},
+			{name: "Jump Squats", default_cue: Meteor.absoluteUrl() + "cues/JumpSquats2.wav"},
+			{name: "Cluster Jump Squats", default_cue: Meteor.absoluteUrl() + "cues/ClusterJumpSquats3.wav"},
+			{name: "Mountain climbers", default_cue: Meteor.absoluteUrl() + "cues/Mountainclimbers2.wav"},
+			{name: "Sit ups", default_cue: Meteor.absoluteUrl() + "cues/Situps2.wav"},
+			{name: "Crunches", default_cue: Meteor.absoluteUrl() + "cues/Crunches2.wav"},
+			{name: "V ups", default_cue: Meteor.absoluteUrl() + "cues/Vups2.wav"},
+			{name: "A frame push ups", default_cue: Meteor.absoluteUrl() + "cues/AFramePushups2.wav"},
+			{name: "Burpees", default_cue: Meteor.absoluteUrl() + "cues/Burpees2.wav"},
+			{name: "Hand release Burpees", default_cue: Meteor.absoluteUrl() + "cues/HandReleaseBurpees2.wav"},
+			{name: "Dips", default_cue: Meteor.absoluteUrl() + "cues/Dips2.wav"},
+			{name: "Lunges", default_cue: Meteor.absoluteUrl() + "cues/Lunges2.wav"},
+			{name: "Iron cross", default_cue: Meteor.absoluteUrl() + "cues/IronCross2.wav"},
+			{name: "Leg raises", default_cue: Meteor.absoluteUrl() + "cues/LegRaises1.wav"},
+			{name: "Leg extensions", default_cue: Meteor.absoluteUrl() + "cues/LegExtensions2.wav"},
+			{name: "Box jumps", default_cue: Meteor.absoluteUrl() + "cues/BoxJumps2.wav"},
+			{name: "Plank", default_cue: Meteor.absoluteUrl() + "cues/Plank2.wav"},
+			{name: "Burpee box jump", default_cue: Meteor.absoluteUrl() + "cues/BurpeeBoxJump3.wav"},
+			{name: "Rest", default_cue: Meteor.absoluteUrl() + "cues/Rest3.wav"},
+			{name: "Side plank", default_cue: Meteor.absoluteUrl() + "cues/SidePlank3.wav"},
+			{name: "Rising Side plank - left", default_cue: Meteor.absoluteUrl() + "cues/RisingSidePlankL3.wav"},
+			{name: "Rising Side plank - right", default_cue: Meteor.absoluteUrl() + "cues/RisingSidePlankR3.wav"}
 		];
 		exercises.forEach(function(exercise){
 			exercise.duration = 30;

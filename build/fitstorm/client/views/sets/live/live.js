@@ -178,14 +178,14 @@ playCue = function(obj) {
 			var aud = new Audio(song.url());
 			aud.play();
 		}else if(obj.default_cue) {
-		 	var cuePopcornIndex = countdownTimerIndex > 0 ? countdownTimerIndex/2 : 0;
-		 	cuePopcorn[cuePopcornIndex].play();
+			var aud = new Audio(obj.default_cue);
+			aud.play();
 		}
 	}
 	isCuePlayed = true;
 }
 
-setCue = function(countdowns, setExercises){
+setCue = function(countdowns, setExercises) {
 	var indxs = 0;
 	_.each(countdowns, function(obj, index) {
 		if(obj.isCue && indxs < setExercises.length) {
@@ -193,9 +193,6 @@ setCue = function(countdowns, setExercises){
 			countdownTimers[index].exerciseId = exerciseId;
 			if(exercise = Exercises.findOne(exerciseId)) {
 				countdownTimers[index].default_cue = exercise.default_cue;
-				var cuePopcornWrapper = Popcorn.HTMLSoundCloudAudioElement("#cueAudio");
-		 		cuePopcornWrapper.src = obj.default_cue;
-		 		cuePopcorn.push(Popcorn(cuePopcornWrapper));
 			}
 			indxs ++;
 		}
