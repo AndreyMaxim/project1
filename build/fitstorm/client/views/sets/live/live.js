@@ -7,6 +7,8 @@ var pageSession = new ReactiveDict(),
 	allowanceTime = 0.1,
 	init = true,
 	isCuePlayed = false,
+	queueAudioSource = [],
+	context = new AudioContext(),
 	audio = null;
 
 Template.SetsLive.rendered = function() {
@@ -23,7 +25,7 @@ Template.SetsLive.rendered = function() {
 
 	var wrapper = Popcorn.HTMLNullVideoElement("#setAudio");
 	wrapper.src = "#t=,"+(this.data.set_details.setDuration*2);
-	popcorn = Popcorn( wrapper ); //Popcorn('#setAudio');
+	popcorn = Popcorn( wrapper );
 
 	_.each(setExercises, function(obj, index) {
 		target = 'set-exercise-item-' + obj._id;
@@ -124,6 +126,7 @@ Template.SetsLive.onDestroyed(function () {
 	init = true;
 	audio = null;
 	isCuePlayed = false;
+	queueAudioSource = [];
 	pageSession.set('isPlaying', false);
 	pageSession.set('isCue', false);
 	$('#audio-item').find('audio').remove();
@@ -178,8 +181,7 @@ playCue = function(obj) {
 			var aud = new Audio(song.url());
 			aud.play();
 		}else if(obj.default_cue) {
-			var aud = new Audio(obj.default_cue);
-			aud.play();
+			queueAudioSource[Math.ceil(countdownTimerIndex/2)].start(0);
 		}
 	}
 	isCuePlayed = true;
@@ -193,6 +195,7 @@ setCue = function(countdowns, setExercises) {
 			countdownTimers[index].exerciseId = exerciseId;
 			if(exercise = Exercises.findOne(exerciseId)) {
 				countdownTimers[index].default_cue = exercise.default_cue;
+				loadAudio(exercise.default_cue);
 			}
 			indxs ++;
 		}
@@ -363,4 +366,27 @@ createAudioElement = function(){
 
 	// Need window.onload to fire first. See crbug.com/112368.
 	window.addEventListener('load', onLoad, false);
+};
+
+loadAudio = function(url) {
+  /* --- set up web audio --- */
+
+  // use context
+  // context = new AudioContext();
+
+  var source = context.createBufferSource();
+  source.connect(context.destination);
+
+  /* --- load up that buffer ---  */
+  var request = new XMLHttpRequest();
+  request.open('GET', url, true); 
+  request.responseType = 'arraybuffer';
+
+  request.onload = function() {
+    context.decodeAudioData(request.response, function(response) {
+    	source.buffer = response;
+    	queueAudioSource.push(source);
+    }, function () { console.error('The request failed.'); } );
+  }
+  request.send();
 };
