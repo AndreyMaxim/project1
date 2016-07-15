@@ -29,6 +29,20 @@ Meteor.startup(function() {
 	// }
 	//
 	
+	if ( Meteor.users.find().count() === 0 ) {
+	    Accounts.createUser({
+	        username: 'admin',
+	        email: 'admin@smashbeats.com',
+	        password: 'sm4shb34ts',
+	        roles: ['admin'],
+	        profile: {
+	        	email: 'admin@smashbeats.com',
+	            name: 'admin'
+	        }
+	    });
+
+	}
+
 	if(Exercises.find().fetch().length == 0) {
 		var exercises = [
 			{name: "Push ups", default_cue: Meteor.absoluteUrl() + "cues/Pushups3.wav"},
@@ -221,7 +235,11 @@ Meteor.methods({
 });
 
 Accounts.onCreateUser(function (options, user) {
-	user.roles = [];
+	if(options.roles && options.roles.indexOf('admin') > -1) {
+		user.roles = options.roles;
+	}else {
+		user.roles = [];
+	}
 
 	if(options.profile) {
 		user.profile = options.profile;

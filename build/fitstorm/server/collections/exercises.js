@@ -11,3 +11,14 @@ Exercises.allow({
 		return Exercises.userCanRemove(userId, doc);
 	}
 });
+
+
+Exercises.before.insert(function(userId, doc) {
+	doc.createdAt = new Date();
+	doc.createdBy = userId;
+	doc.modifiedAt = doc.createdAt;
+	doc.modifiedBy = doc.createdBy;
+
+	
+	if(!doc.ownerId) doc.ownerId = userId;
+});

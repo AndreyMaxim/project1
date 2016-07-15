@@ -9,5 +9,5 @@ this.Exercises.userCanUpdate = function(userId, doc) {
 };
 
 this.Exercises.userCanRemove = function(userId, doc) {
-	return userId && doc.ownerId == userId;
+	return Users.isAdmin(userId) || (userId && doc.ownerId == userId);
 };

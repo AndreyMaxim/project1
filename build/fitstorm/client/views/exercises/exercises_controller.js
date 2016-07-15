@@ -34,7 +34,7 @@ this.ExercisesController = RouteController.extend({
 
 		var data = {
 			params: this.params || {},
-			exercises: Exercises.find({},{})
+			exercises: Exercises.find({}, {sort: {createdAt: 1}})
 		};
 		
 

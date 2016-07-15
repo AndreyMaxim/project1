@@ -41,6 +41,9 @@ Template.EditExercise.helpers({
 	},
 	"isUploading": function() {
 		return pageSession.get('isUploading');
+	},
+	"isAdmin" : function(){
+		return Users.isAdmin(Meteor.userId());
 	}
 });
 

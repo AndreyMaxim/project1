@@ -9,7 +9,7 @@
 			<label> Duration/Rep: </label>
 			<input type='number' value="30" name="duration" class="form-control" id="exercise-duration" required/>
 		</div>
-		<div class="form-group">
+		<!-- <div class="form-group">
 			<label> Record Cue: </label><br/>
 			{{#if isRecording}}
 				<button type="button" class="btn btn-danger" id='record-cue-stop'> Stop Recording </button>
@@ -18,20 +18,30 @@
 				<button type="button" class="btn btn-primary" id='record-cue-start'> Start Recording </button>
 			{{/if}}
 		</div>
-		<p> OR </p>
-		<div class="form-group field-song-id">
-			<label for="songId">
-				Upload Cue (mp3):
-			</label>
-			<div class="input-div">
-				<input type="file" id="field-song-id" class="file" multiple="false" data-show-upload="false" data-show-caption="true" data-field="songId">
-				<input type="hidden" name="songIds" value="">
-				<span id="help-text" class="help-block">
-				</span>
-				<span id="error-text" class="help-block">
-				</span>
+		<p> OR </p> -->
+		{{#if isAdmin}}
+			<div class="form-group">
+				<label for="default_cue">
+					Default Cue
+				</label>
+				<input type='url' placeholder="Audio url here" name="default_cue" class="form-control" id="default-cue" />
 			</div>
-		</div>
+		{{else}}
+			<div class="form-group field-song-id">
+				<label for="songId">
+					Upload Cue (mp3):
+				</label>
+				<div class="input-div">
+					<input type="file" id="field-song-id" class="file" multiple="false" data-show-upload="false" data-show-caption="true" data-field="songId">
+					<input type="hidden" name="songIds" value="">
+					<span id="help-text" class="help-block">
+					</span>
+					<span id="error-text" class="help-block">
+					</span>
+				</div>
+			</div>
+		{{/if}}
+
 		{{#if isUploading}}
 			<div class="notification">
            		<p class="lead">

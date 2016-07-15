@@ -103,12 +103,14 @@ Template.ExercisesViewTableItems.helpers({
 });
 
 Template.ExercisesViewTableItems.events({
-	"click #edit-button": function(e, t){
+	"click #edit-button" : function(e, t){
 		e.preventDefault();
 		Router.go("exercises.edit", {exerciseId: this._id});
 		return false;
+	},
+	"click #delete-button" : function(e, t) {
+		Exercises.remove(this._id);
 	}
-
 });
 
 Template.ExercisesView.helpers({
