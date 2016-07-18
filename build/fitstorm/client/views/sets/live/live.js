@@ -28,11 +28,12 @@ Template.SetsLive.rendered = function() {
 	popcorn = Popcorn( wrapper );
 
 	_.each(setExercises, function(obj, index) {
+		isRest = (obj.exercise.indexOf('Rest') > -1);
+		exerciseCueTime = isRest ? 0 : cueTime+1;
 		target = 'set-exercise-item-' + obj._id;
-		playTime = start - allowanceTime;
+		playTime = start - allowanceTime - (isRest ? cueTime : 0);
 		endPlayTime = playTime + obj.duration - allowanceTime;
 		isLastItem = (index == setExercises.length-1);
-		
 		popcorn
 			.footnote({
 				start : playTime,
@@ -52,7 +53,7 @@ Template.SetsLive.rendered = function() {
 			$('.active-exercise').fadeOut('slow').delay(1000);
 		});
 
-		start = start + obj.duration + cueTime;
+		start = start + obj.duration + exerciseCueTime;
 	});
 
 	setCue(countdownTimers, setExercises);
@@ -70,7 +71,8 @@ Template.SetsLive.helpers({
 		return pageSession.get('set_details');
 	},
 	getCountdownTimer: function() {
-        return  (Template.instance().remaining.get() + (pageSession.get('isCue') ? '' : 's'));
+		var remainingSec = Template.instance().remaining.get();
+        return  remainingSec == 0 ? "" : (remainingSec + (pageSession.get('isCue') ? '' : 's'));
     },
     isPlaying: function() {
     	return pageSession.get('isPlaying');
@@ -86,7 +88,10 @@ Template.SetsLive.created = function(){
   this.interval = Meteor.setInterval(function() {
   	if(pageSession.get('isPlaying')) {
 	    var remaining = self.remaining.get();
-	    self.remaining.set(--remaining);
+	    if(remaining > 0){
+		    self.remaining.set(--remaining);
+	    }
+
 	    if (remaining === 0) {
 	    	countdownTimerIndex ++;
 	    	if(remainingTimer = countdownTimers[countdownTimerIndex]) {
@@ -104,8 +109,6 @@ Template.SetsLive.created = function(){
 	    	}else {
 			    Meteor.clearInterval(this.interval);
 	    	}
-	    }else if(remaining < 0) {
-	    	self.remaining.set(0);
 	    }
     }
     if(pageSession.get('isCue') && !isCuePlayed) {
@@ -181,7 +184,7 @@ playCue = function(obj) {
 			var aud = new Audio(song.url());
 			aud.play();
 		}else if(obj.default_cue) {
-			queueAudioSource[Math.ceil(countdownTimerIndex/2)].start(0);
+			playAudio(obj.default_cue);
 		}
 	}
 	isCuePlayed = true;
@@ -195,7 +198,9 @@ setCue = function(countdowns, setExercises) {
 			countdownTimers[index].exerciseId = exerciseId;
 			if(exercise = Exercises.findOne(exerciseId)) {
 				countdownTimers[index].default_cue = exercise.default_cue;
-				loadAudio(exercise.default_cue);
+				if(exercise.name.indexOf('Rest') > -1){
+					countdownTimers[index].duration = 0;
+				}
 			}
 			indxs ++;
 		}
@@ -368,7 +373,7 @@ createAudioElement = function(){
 	window.addEventListener('load', onLoad, false);
 };
 
-loadAudio = function(url) {
+playAudio = function(url) {
   /* --- set up web audio --- */
 
   // use context
@@ -385,7 +390,8 @@ loadAudio = function(url) {
   request.onload = function() {
     context.decodeAudioData(request.response, function(response) {
     	source.buffer = response;
-    	queueAudioSource.push(source);
+    	// queueAudioSource.push(source);
+    	source.start(0);
     }, function () { console.error('The request failed.'); } );
   }
   request.send();
