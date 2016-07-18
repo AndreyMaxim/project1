@@ -109,7 +109,27 @@ Template.ExercisesViewTableItems.events({
 		return false;
 	},
 	"click #delete-button" : function(e, t) {
-		Exercises.remove(this._id);
+		e.preventDefault();
+		var self = this;
+		bootbox.dialog({
+			message: "Delete? Are you sure?",
+			title: "Delete",
+			animate: false,
+			buttons: {
+				success: {
+					label: "Yes",
+					className: "btn-success",
+					callback: function() {
+						Exercises.remove(self._id);
+					}
+				},
+				danger: {
+					label: "No",
+					className: "btn-default"
+				}
+			}
+		});
+		return false;
 	}
 });
 

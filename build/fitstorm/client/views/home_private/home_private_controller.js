@@ -19,6 +19,8 @@ this.HomePrivateController = RouteController.extend({
 		
 
 		var subs = [
+			Meteor.subscribe("set_list"),
+			Meteor.subscribe("exercises_all")
 		];
 		var ready = true;
 		_.each(subs, function(sub) {
@@ -32,7 +34,8 @@ this.HomePrivateController = RouteController.extend({
 		
 
 		var data = {
-			params: this.params || {}
+			params: this.params || {},
+			set_list: Sets.find({},{ transform: function(doc){ doc.set_exercises_joined = SetExercises.find({setId: doc._id}).fetch(); return doc; }},{sort:[["setName","desc"]]}),
 		};
 		
 

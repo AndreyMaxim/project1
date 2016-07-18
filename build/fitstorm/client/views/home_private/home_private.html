@@ -12,10 +12,37 @@
 		<p id="page_text">
 			This is SmashBeats - an app for you to create and search workouts.
 		</p>
-		<div class="row">
+		<!-- <div class="row">
 			<a href="/sets?type=EMOM" class="btn btn-block btn-primary">EMOM</a>
 			<a href="/sets?type=Tabata" class="btn btn-block btn-primary">Tabata</a>
 			<a href="/sets?type=Interval" class="btn btn-block btn-primary">Custom Interval</a>
+		</div> -->
+		<div class="row">
+			{{#each this.set_list}}
+				<div class="panel-group">
+				  <div class="panel panel-default">
+				    <div class="panel-heading">
+				      <h4 class="panel-title">
+				        <a data-toggle="collapse" class="text-primary home-set-name" href="#{{_id}}">{{ setName }}</a>
+				        <a href="#" class="set-execution-btn pull-right text-primary"> Preview </a>
+				      </h4>
+				    </div>
+				    <div id="{{_id}}" class="panel-collapse collapse">
+					    <div class="panel-body">
+					    	<p> Duration: {{setDuration}} secs</p>
+					    	<p> Exercises: </p>
+					    	<ul class="no-style">
+						    	{{#each set_exercises_joined}}
+						    		<li>
+						    			{{exercise}} <span>({{ duration }} secs)</span>
+						    		</li>
+						    	{{/each}}
+					    	</ul>
+				    	</div>
+				    </div>
+				  </div>
+				</div>
+			{{/each}}
 		</div>
 	</div>
 </template>

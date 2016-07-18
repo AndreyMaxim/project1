@@ -119,14 +119,34 @@ Template.AddExercises.events({
 		pageSession.set('selectedExercise', setExercise);
 	},
 	"click .delete-exercise": function(e) {
-		var $targetId    = $(e.target).parent().data('id'),
-			set_exercises  = pageSession.get('set_exercises');
+		e.preventDefault();
+		var self = this;
+		bootbox.dialog({
+			message: "Delete? Are you sure?",
+			title: "Delete",
+			animate: false,
+			buttons: {
+				success: {
+					label: "Yes",
+					className: "btn-success",
+					callback: function() {
+						var $targetId    = $(e.target).parent().data('id'),
+							set_exercises  = pageSession.get('set_exercises');
 
-		set_exercises = _.reject(set_exercises, function(obj){ return obj._id == $targetId; });
-		SetExercises.remove($targetId);
-		pageSession.set('exerciseAction', null);
-		pageSession.set('set_exercises', set_exercises);
-		pageSession.set('hasExercises', set_exercises.length);
+						set_exercises = _.reject(set_exercises, function(obj){ return obj._id == $targetId; });
+						SetExercises.remove($targetId);
+						pageSession.set('exerciseAction', null);
+						pageSession.set('set_exercises', set_exercises);
+						pageSession.set('hasExercises', set_exercises.length);
+					}
+				},
+				danger: {
+					label: "No",
+					className: "btn-default"
+				}
+			}
+		});
+		return false;
 	},
 	"click #record-cue-start": function() {
 		pageSession.set('isRecording', true);
