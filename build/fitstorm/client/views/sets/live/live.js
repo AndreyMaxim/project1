@@ -29,7 +29,7 @@ Template.SetsLive.rendered = function() {
 
 	_.each(setExercises, function(obj, index) {
 		isRest = (obj.exercise.indexOf('Rest') > -1);
-		exerciseCueTime = isRest ? 0 : cueTime+1;
+		exerciseCueTime = isRest ? 0 : cueTime;
 		target = 'set-exercise-item-' + obj._id;
 		playTime = start - allowanceTime - (isRest ? cueTime : 0);
 		endPlayTime = playTime + obj.duration - allowanceTime;
