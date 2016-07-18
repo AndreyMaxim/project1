@@ -9,6 +9,7 @@ var pageSession = new ReactiveDict(),
 	isCuePlayed = false,
 	queueAudioSource = [],
 	context = new AudioContext(),
+	restCueTime = 1,
 	audio = null;
 
 Template.SetsLive.rendered = function() {
@@ -29,10 +30,10 @@ Template.SetsLive.rendered = function() {
 
 	_.each(setExercises, function(obj, index) {
 		isRest = (obj.exercise.indexOf('Rest') > -1);
-		exerciseCueTime = isRest ? 0 : cueTime;
+		exerciseCueTime = isRest ? restCueTime : cueTime;
 		target = 'set-exercise-item-' + obj._id;
 		playTime = start - allowanceTime - (isRest ? cueTime : 0);
-		endPlayTime = playTime + obj.duration - allowanceTime;
+		endPlayTime = playTime + obj.duration - allowanceTime + (isRest ? restCueTime : 0);
 		isLastItem = (index == setExercises.length-1);
 		popcorn
 			.footnote({
