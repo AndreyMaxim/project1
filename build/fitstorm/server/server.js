@@ -69,7 +69,8 @@ Meteor.startup(function() {
 			{name: "Rest", default_cue: Meteor.absoluteUrl() + "cues/Rest3.wav"},
 			{name: "Side plank", default_cue: Meteor.absoluteUrl() + "cues/SidePlank3.wav"},
 			{name: "Rising Side plank - left", default_cue: Meteor.absoluteUrl() + "cues/RisingSidePlankL3.wav"},
-			{name: "Rising Side plank - right", default_cue: Meteor.absoluteUrl() + "cues/RisingSidePlankR3.wav"}
+			{name: "Rising Side plank - right", default_cue: Meteor.absoluteUrl() + "cues/RisingSidePlankR3.wav"},
+			{name: "Silent", default_cue: null},
 		];
 		exercises.forEach(function(exercise){
 			exercise.duration = 30;
