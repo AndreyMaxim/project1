@@ -91,7 +91,7 @@ Template.SetsInsertInsertForm.events({
 				if(songId = values.spotifyPlaylist) {
 					values.songId = songId;
 				}
-
+				values.preview_count = parseInt(values.preview_count);
 				newId = Sets.insert(values, function(e) { if(e) errorAction(e); else submitAction(); });
 
 				_.each(getExercises(), function(exercise) {

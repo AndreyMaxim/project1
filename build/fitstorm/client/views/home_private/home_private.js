@@ -14,6 +14,7 @@ Template.HomePrivate.events({
 					label: "Yes",
 					className: "btn-success",
 					callback: function() {
+						Sets.update({ _id: _self._id}, {$inc: { preview_count: -1 }});
 						Router.go("sets.live", {setId : _self._id});
 					}
 				},

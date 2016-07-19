@@ -5,7 +5,13 @@ Template.SetsDetails.rendered = function() {
 };
 
 Template.SetsDetails.events({
-	
+	"click .execute-set-btn" : function(e, t) {
+		e.preventDefault();
+
+		var id = this.params.setId;
+		Sets.update({ _id: id }, {$inc: { preview_count: -1 }});
+		Router.go("sets.live", { setId: id });
+	}
 });
 
 Template.SetsDetails.helpers({
