@@ -29,5 +29,7 @@ Template.HomePrivate.events({
 });
 
 Template.HomePrivate.helpers({
-	
+	getTitle : function() {
+		return this.songDetail ? this.songDetail.original.name : this.setName;
+	}
 });

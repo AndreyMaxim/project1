@@ -23,7 +23,9 @@
 				  <div class="panel panel-default">
 				    <div class="panel-heading">
 				      <h4 class="panel-title">
-				        <a data-toggle="collapse" class="text-primary home-set-name" href="#{{_id}}">{{ setName }}</a>
+				        <a data-toggle="collapse" class="text-primary home-set-name" href="#{{_id}}">
+				        	{{ getTitle }}				        	
+				        </a>
 				        {{#if preview_count}}
 				       		<a href="#" class="set-execution-btn pull-right text-primary"> Preview ({{ preview_count }}) </a>
 				      	{{else}}

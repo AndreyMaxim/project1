@@ -35,7 +35,7 @@ this.HomePrivateController = RouteController.extend({
 
 		var data = {
 			params: this.params || {},
-			set_list: Sets.find({},{ transform: function(doc){ doc.set_exercises_joined = SetExercises.find({setId: doc._id}).fetch(); return doc; }},{sort:[["setName","desc"]]}),
+			set_list: Sets.find({},{ transform: function(doc){ doc.set_exercises_joined = SetExercises.find({setId: doc._id}).fetch(); doc.songDetail = Songs.findOne(doc.songId); return doc; }},{sort:[["setName","desc"]]}),
 		};
 		
 
