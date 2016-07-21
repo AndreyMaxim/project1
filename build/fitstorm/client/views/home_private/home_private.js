@@ -1,4 +1,10 @@
 Template.HomePrivate.rendered = function() {
+	
+};
+
+
+Template.HomePrivate.created = function() {
+	this.voice = new ReactiveVar('English');
 };
 
 Template.HomePrivate.events({
@@ -25,11 +31,23 @@ Template.HomePrivate.events({
 			}
 		});
 		return false;
+	},
+	"click .voice-option-btn": function() {
+		$('#voice-option-modal').modal({show: true});
 	}
 });
 
 Template.HomePrivate.helpers({
 	getTitle : function() {
 		return this.songDetail ? this.songDetail.original.name : this.setName;
+	},
+	getVoiceOption: function(){
+		return Template.instance().voice.get();
 	}
 });
+
+Template.VoiceOptionModal.events({
+	"click .done" : function() {
+		$('#voice-option-modal').modal("hide");
+	}
+})

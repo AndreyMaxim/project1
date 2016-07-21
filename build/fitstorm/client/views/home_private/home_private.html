@@ -50,6 +50,62 @@
 				</div>
 			{{/each}}
 		</div>
+		<div class="row">
+			<label> Voice: </label>
+			<!-- <span> {{getVoiceOption}} </span> -->
+			<button class="btn btn-default btn-xs voice-option-btn"> {{getVoiceOption}} </button>
+
+			<!-- set up the modal to start hidden and fade in and out -->
+			<div id="voice-option-modal" class="modal fade">
+			  {{> VoiceOptionModal }}
+			</div>
+
+		</div>
 	</div>
 </template>
 
+<template name="VoiceOptionModal">
+	<div class="modal-dialog">
+    	<div class="modal-content">
+	    	<div class="modal-body">
+	    		<table border="0" class="table table-striped table-hover">
+	    			<tr>
+	    				<th> English </th>
+	    				<td> <button class="btn btn-primary btn-xs"> Choose </button> </td>
+	    			</tr>
+	    			<tr>
+	    				<th> Batman </th>
+	    				<td>
+			    			<button class="btn btn-primary btn-xs"> Preview </button>
+	    					<button class="btn btn-success btn-xs"> Purchase </button>
+	    				</td>
+	    			</tr>
+	    			<tr>
+	    				<th> Drill Instructor </th>
+	    				<td>
+			    			<button class="btn btn-primary btn-xs"> Preview </button>
+	    					<button class="btn btn-success btn-xs"> Purchase </button>
+	    				</td>
+	    			</tr>
+	    			<tr>
+	    				<th> Woman </th>
+	    				<td>
+			    			<button class="btn btn-primary btn-xs"> Preview </button>
+	    					<button class="btn btn-success btn-xs"> Purchase </button>
+	    				</td>
+	    			</tr>
+	    			<tr>
+	    				<th> Sexy Woman</th>
+	    				<td>
+			    			<button class="btn btn-primary btn-xs"> Preview </button>
+	    					<button class="btn btn-success btn-xs"> Purchase </button>
+	    				</td>
+	    			</tr>
+	    		</table>
+		    </div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default done">Done</button>
+			</div>
+    	</div>
+  	</div>
+</template>
