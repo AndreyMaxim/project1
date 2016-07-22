@@ -191,6 +191,9 @@ loadCue = function(obj, index) {
 			var aud = new Audio(song.url());
 			aud.play();
 		}else if(obj.default_cue) {
+			if(obj.default_cue.indexOf(Meteor.absoluteUrl()) > -1) {
+				obj.default_cue = obj.default_cue.replace(Meteor.absoluteUrl(), '/');
+			}
 			playCueSound(obj.default_cue);
 		}
 	}
