@@ -117,7 +117,7 @@ Template.SetsLive.created = function(){
 	    }
     }
     if(pageSession.get('isCue') && !isCuePlayed) {
-    	playCue(countdownTimers[countdownTimerIndex], countdownTimerIndex);
+    	playCue(countdownTimers[countdownTimerIndex], parseInt(countdownTimerIndex/2));
     }
   }, 1000);
 };
@@ -189,7 +189,7 @@ playCue = function(obj, index) {
 			var aud = new Audio(song.url());
 			aud.play();
 		}else if(obj.default_cue) {
-			queueAudioSource[Math.abs(index/2)].start(0);
+			queueAudioSource[index].start(0);
 		}
 	}
 	isCuePlayed = true;
