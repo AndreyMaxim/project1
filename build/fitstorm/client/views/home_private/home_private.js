@@ -8,7 +8,7 @@ Template.HomePrivate.created = function() {
 };
 
 Template.HomePrivate.events({
-	"click .set-execution-btn" : function(e, t) {
+	"click .set-execution-btn, click .buy-set-btn" : function(e, t) {
 		e.preventDefault();
 		var _self = this;
 		bootbox.dialog({
@@ -43,6 +43,9 @@ Template.HomePrivate.helpers({
 	},
 	getVoiceOption: function(){
 		return Template.instance().voice.get();
+	},
+	hasPreviewCredits: function() {
+		return (this.preview_count > 0);
 	}
 });
 

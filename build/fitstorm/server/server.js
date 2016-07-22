@@ -3,12 +3,18 @@ var verifyEmail = false;
 Accounts.config({ sendVerificationEmail: verifyEmail });
 
 Meteor.startup(function() {
+	Meteor.AppCache.config({
+		onlineOnly: ['/fonts/','/images/','/videos/','/packages/']
+	});
+
 	// read environment variables from Meteor.settings
 	if(Meteor.settings && Meteor.settings.env && _.isObject(Meteor.settings.env)) {
 		for(var variableName in Meteor.settings.env) {
 			process.env[variableName] = Meteor.settings.env[variableName];
 		}
 	}
+
+	
 
 	//
 	// Setup OAuth login service configuration (read from Meteor.settings)

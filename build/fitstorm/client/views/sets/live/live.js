@@ -8,7 +8,8 @@ var pageSession = new ReactiveDict(),
 	init = true,
 	isCuePlayed = false,
 	queueAudioSource = [],
-	context = new AudioContext(),
+	cueContext = null,
+	setContext = null,
 	restCueTime = 1,
 	audio = null;
 
@@ -24,6 +25,9 @@ Template.SetsLive.rendered = function() {
 	pageSession.set('hasSetStarted', false);
 	pageSession.set('isPlaying', false);
 
+	cueContext = cueContext ? cueContext : new AudioContext();
+	setContext = setContext ? setContext : new AudioContext();
+	
 	var wrapper = Popcorn.HTMLNullVideoElement("#setAudio");
 	wrapper.src = "#t=,"+(this.data.set_details.setDuration*2);
 	popcorn = Popcorn( wrapper );
@@ -113,7 +117,7 @@ Template.SetsLive.created = function(){
 	    }
     }
     if(pageSession.get('isCue') && !isCuePlayed) {
-    	playCue(countdownTimers[countdownTimerIndex]);
+    	playCue(countdownTimers[countdownTimerIndex], countdownTimerIndex);
     }
   }, 1000);
 };
@@ -179,13 +183,13 @@ handleAudio = function(hasSetStarted, isPlaying) {
 	pageSession.set('isPlaying', !isPlaying);
 };
 
-playCue = function(obj) {
+playCue = function(obj, index) {
 	if(obj.isCue && obj.exerciseId) {
 		if(song = Songs.findOne({exerciseId: obj.exerciseId})) {
 			var aud = new Audio(song.url());
 			aud.play();
 		}else if(obj.default_cue) {
-			playAudio(obj.default_cue);
+			queueAudioSource[Math.abs(index/2)].start(0);
 		}
 	}
 	isCuePlayed = true;
@@ -199,9 +203,10 @@ setCue = function(countdowns, setExercises) {
 			countdownTimers[index].exerciseId = exerciseId;
 			if(exercise = Exercises.findOne(exerciseId)) {
 				countdownTimers[index].default_cue = exercise.default_cue;
-				if(exercise.name.indexOf('Rest') > -1){
+				if(exercise.name.indexOf('Rest') > -1) {
 					countdownTimers[index].duration = 0;
 				}
+				loadCue(exercise.default_cue);
 			}
 			indxs ++;
 		}
@@ -342,8 +347,7 @@ createAudioElement = function(){
 	  return;
 	}
 
-	var context = new AudioContext();
-	var analyser = context.createAnalyser();
+	var analyser = setContext.createAnalyser();
 
 	function rafCallback(time) {
 	  window.requestAnimationFrame(rafCallback, canvas);
@@ -363,9 +367,9 @@ createAudioElement = function(){
 	}
 
 	function onLoad(e) {
-	  var source = context.createMediaElementSource(audio);
+	  var source = setContext.createMediaElementSource(audio);
 	  source.connect(analyser);
-	  analyser.connect(context.destination);
+	  analyser.connect(setContext.destination);
 
 	  rafCallback();
 	}
@@ -374,14 +378,14 @@ createAudioElement = function(){
 	window.addEventListener('load', onLoad, false);
 };
 
-playAudio = function(url) {
+loadCue = function(url) {
   /* --- set up web audio --- */
 
   // use context
   // context = new AudioContext();
 
-  var source = context.createBufferSource();
-  source.connect(context.destination);
+  var source = cueContext.createBufferSource();
+  source.connect(cueContext.destination);
 
   /* --- load up that buffer ---  */
   var request = new XMLHttpRequest();
@@ -389,10 +393,10 @@ playAudio = function(url) {
   request.responseType = 'arraybuffer';
 
   request.onload = function() {
-    context.decodeAudioData(request.response, function(response) {
+    cueContext.decodeAudioData(request.response, function(response) {
     	source.buffer = response;
-    	// queueAudioSource.push(source);
-    	source.start(0);
+    	queueAudioSource.push(source);
+    	// source.start(0);
     }, function () { console.error('The request failed.'); } );
   }
   request.send();
