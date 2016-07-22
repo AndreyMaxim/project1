@@ -25,8 +25,8 @@ Template.SetsLive.rendered = function() {
 	pageSession.set('hasSetStarted', false);
 	pageSession.set('isPlaying', false);
 
-	cueContext = cueContext ? cueContext : new AudioContext();
-	setContext = setContext ? setContext : new AudioContext();
+	cueContext = new AudioContext(); 
+	setContext = new AudioContext();
 	
 	var wrapper = Popcorn.HTMLNullVideoElement("#setAudio");
 	wrapper.src = "#t=,"+(this.data.set_details.setDuration*2);
@@ -134,6 +134,8 @@ Template.SetsLive.onDestroyed(function () {
 	init = true;
 	audio = null;
 	isCuePlayed = false;
+	cueContext.close();
+	setContext.close();
 	queueAudioSource = [];
 	pageSession.set('isPlaying', false);
 	pageSession.set('isCue', false);
@@ -189,7 +191,7 @@ playCue = function(obj, index) {
 			var aud = new Audio(song.url());
 			aud.play();
 		}else if(obj.default_cue) {
-			queueAudioSource[index].start(0);
+			queueAudioSource[index].start();
 		}
 	}
 	isCuePlayed = true;
