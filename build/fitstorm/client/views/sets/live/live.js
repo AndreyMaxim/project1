@@ -117,7 +117,7 @@ Template.SetsLive.created = function(){
 	    }
     }
     if(pageSession.get('isCue') && !isCuePlayed) {
-    	playCue(countdownTimers[countdownTimerIndex], parseInt(countdownTimerIndex/2));
+    	loadCue(countdownTimers[countdownTimerIndex], parseInt(countdownTimerIndex/2));
     }
   }, 1000);
 };
@@ -185,13 +185,13 @@ handleAudio = function(hasSetStarted, isPlaying) {
 	pageSession.set('isPlaying', !isPlaying);
 };
 
-playCue = function(obj, index) {
+loadCue = function(obj, index) {
 	if(obj.isCue && obj.exerciseId) {
 		if(song = Songs.findOne({exerciseId: obj.exerciseId})) {
 			var aud = new Audio(song.url());
 			aud.play();
 		}else if(obj.default_cue) {
-			queueAudioSource[index].start();
+			playCueSound(obj.default_cue);
 		}
 	}
 	isCuePlayed = true;
@@ -208,7 +208,6 @@ setCue = function(countdowns, setExercises) {
 				if(exercise.name.indexOf('Rest') > -1) {
 					countdownTimers[index].duration = 0;
 				}
-				loadCue(exercise.default_cue);
 			}
 			indxs ++;
 		}
@@ -380,7 +379,7 @@ createAudioElement = function(){
 	window.addEventListener('load', onLoad, false);
 };
 
-loadCue = function(url) {
+playCueSound = function(url) {
   /* --- set up web audio --- */
 
   // use context
@@ -397,8 +396,8 @@ loadCue = function(url) {
   request.onload = function() {
     cueContext.decodeAudioData(request.response, function(response) {
     	source.buffer = response;
-    	queueAudioSource.push(source);
-    	// source.start(0);
+    	// queueAudioSource.push(source);
+    	source.start();
     }, function () { console.error('The request failed.'); } );
   }
   request.send();
