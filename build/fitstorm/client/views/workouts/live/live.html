@@ -1,23 +1,53 @@
 <template name="WorkoutsLive">
-	<div class="page-container container" id="content">
-		<div class="row" id="title_row">
-			<div class="col-md-12">
-				<div id="page_menu" class="pull-right">
-				</div>
-			</div>
-		</div>
-		<div class="row text-center">
-			<h2> Workout Sets </h2>
-		    <ul class="list-group">
-		    	{{#each getWorkoutSets this.workout_details}}
-					<li class="list-group-item">
-				    	<span class="badge"> Duration: {{setDuration}}s </span>
-					    <a class="btn-link" href="{{pathFor 'sets.live' setId=_id}}"> {{setName}} </a>
-				  	</li>
-		    	{{/each}}
-			</ul>
-		</div>
-	</div>
+	<section id="radio">
+      <div class="">
+        <div class="row">
+          <div class="col-xs-12">
+          	<!-- 
+          	<div class="topbar">
+              <ul class="list-inline">
+                <li><a href="#"><i class="fa fa-bars"></i></a></li>
+                <li>
+                  <button class="btn btn-lg up"><span>My Stations</span></button>
+                  <button class="btn btn-lg ult"><span>Browse</span></button>
+                </li>
+              </ul>
+            </div>
+             -->
+            <div class="recent">
+              <ul class="list-inline">
+                <li>
+                  <button class="btn btn-lg up"><span>recent</span></button>
+                </li>
+                <li>
+                  <p>A-Z</p>
+                </li>
+              </ul>
+            </div>
+            {{#each getWorkoutSets this.workout_details}}
+            	<a href="{{pathFor 'sets.live' setId=_id}}">
+	            	<div class="songspuse">
+		              <ul class="list-inline">
+		                <li>
+		                  	<div class="img">
+		                  		<!-- <img src="img/song1.jpg" /> -->
+		                  		<span>
+			                      <div class="tack-mame">
+			                        <p> {{ setName }} </p>
+			                        <h6> Duration: {{setDuration}}s </h6>
+			                        <h6> Created in {{createdAt}} </h6>
+			                      </div>
+		                    	</span>
+		                    </div>
+		                </li>
+		              </ul>
+		            </div>
+	            </a>
+	    	{{/each}}
+          </div>
+        </div>
+      </div>
+    </section>
 </template>
 
 

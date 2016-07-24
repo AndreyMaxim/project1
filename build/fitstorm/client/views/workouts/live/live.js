@@ -19,7 +19,9 @@ Template.WorkoutsLive.helpers({
 Template.registerHelper('getWorkoutSets', function (workout) {
 	var sets = Sets.find({_id:
 		{$in: _.pluck(workout.sets, '_id')}},
-		{transform: function(doc){
+		{transform: function(doc) {
+			doc.createdAt = moment(doc.createdAt).format('MMMM DD, YYYY');  
+			doc.setName = doc.setName.toUpperCase();
 			setExercises = SetExercises.find({setId: doc._id}).fetch();
 			doc.set_exercises_joined = isTabata(doc.type) ? setTabataExercises(setExercises, doc._id) : setExercises;
 			return doc;
