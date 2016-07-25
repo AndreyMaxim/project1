@@ -5,7 +5,7 @@ Template.SetsDetails.rendered = function() {
 };
 
 Template.SetsDetails.events({
-	"click .execute-set-btn" : function(e, t) {
+	"click .execute-set-btn, click .buy-set-btn" : function(e, t) {
 		e.preventDefault();
 
 		var id = this.params.setId;

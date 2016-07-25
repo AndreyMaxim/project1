@@ -71,6 +71,7 @@ Template.AddExercises.helpers({
 Template.AddExercises.events({
 	"click .save-exercise" : function(e) 
 	{
+		e.preventDefault();
 		var set_exercises 	 = pageSession.get('set_exercises'),
 			action       = pageSession.get('exerciseAction'),
 			selectedExercise = pageSession.get('selectedExercise'),
@@ -106,13 +107,16 @@ Template.AddExercises.events({
 		pageSession.set('hasExercises', set_exercises.length);
 		pageSession.set('set_exercises', set_exercises);
 	},
-	"click .add-exercise" : function() {
+	"click .add-exercise" : function(e) {
+		e.preventDefault();
 		pageSession.set('exerciseAction', 'Add');
 	},
-	"click .cancel-exercise": function() {
+	"click .cancel-exercise": function(e) {
+		e.preventDefault();
 		pageSession.set('exerciseAction', null);
 	},
 	"click .edit-exercise": function(e, t) {
+		e.preventDefault();
 		var $targetId = $(e.target).parent().data('id');
 		setExercise = $.grep(pageSession.get('set_exercises'), function(exrcse){ return exrcse._id == $targetId; });
 		pageSession.set('exerciseAction', 'Edit');
@@ -148,7 +152,8 @@ Template.AddExercises.events({
 		});
 		return false;
 	},
-	"click #record-cue-start": function() {
+	"click #record-cue-start": function(e) {
+		e.preventDefault();
 		pageSession.set('isRecording', true);
 		if(Records.ready()) {
 			Records.startRecording({},function(err, id) {
@@ -156,7 +161,8 @@ Template.AddExercises.events({
 			});
 		}
 	},
-	"click #record-cue-stop": function() {
+	"click #record-cue-stop": function(e) {
+		e.preventDefault();
 		pageSession.set('isRecording', false);
 		Records.stopRecording();
 	}
