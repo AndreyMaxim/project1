@@ -2,16 +2,15 @@ var pageSession = new ReactiveDict(),
 	popcorn = null,
 	cuePopcorn = [],
 	cueTime = 3,
-	countdownTimers = [{isCue: true, duration: cueTime}],
-	countdownTimerIndex = 0,
+	cueItems = [],
+	cueItemIndex = 0,
 	allowanceTime = 0.1,
 	init = true,
-	isCuePlayed = false,
-	queueAudioSource = [],
 	cueContext = null,
 	setContext = null,
 	restCueTime = 1,
-	audio = null;
+	audio = null,
+	isFirstCuePlayed = false;
 
 Template.SetsLive.rendered = function() {
 	var set_details = this.data.set_details,
@@ -33,12 +32,12 @@ Template.SetsLive.rendered = function() {
 	popcorn = Popcorn( wrapper );
 
 	_.each(setExercises, function(obj, index) {
-		isRest = (obj.exercise.indexOf('Rest') > -1);
-		exerciseCueTime = isRest ? restCueTime : cueTime;
 		target = 'set-exercise-item-' + obj._id;
-		playTime = start - allowanceTime - (isRest ? cueTime : 0);
-		endPlayTime = playTime + obj.duration - allowanceTime + (isRest ? restCueTime : 0);
-		isLastItem = (index == setExercises.length-1);
+		playTime = start - allowanceTime;
+		endPlayTime = playTime + obj.duration;
+		cuePlayTime =  endPlayTime - (cueTime - restCueTime);
+		nextExercise = setExercises[index + 1] || undefined;
+
 		popcorn
 			.footnote({
 				start : playTime,
@@ -48,20 +47,24 @@ Template.SetsLive.rendered = function() {
 				effect: 'applyclass',
 				applyclass: "active-exercise, text-lead"
 			});
-		
-		countdownTimers.push({isCue: false, duration: obj.duration});
-		if(!isLastItem) {
-			countdownTimers.push({isCue: true, duration: cueTime});
-		}
 
 		popcorn.cue(endPlayTime - 0.5, function() {
 			$('.active-exercise').fadeOut('slow').delay(1000);
 		});
+		
+		if(nextExercise && (nextExercise.exercise.indexOf('Rest') > -1)) {
+			cuePlayTime = endPlayTime;
+		}
 
-		start = start + obj.duration + exerciseCueTime;
+		popcorn.cue(cuePlayTime, function() {
+			++ cueItemIndex;
+			loadCue(cueItems[cueItemIndex]);
+		});
+
+		start = start + obj.duration;
 	});
 
-	setCue(countdownTimers, setExercises);
+	setCue(setExercises);
 	createAudioElement();
 };
 
@@ -77,47 +80,32 @@ Template.SetsLive.helpers({
 	},
 	getCountdownTimer: function() {
 		var remainingSec = Template.instance().remaining.get();
-        return  remainingSec == 0 ? "" : (remainingSec + (pageSession.get('isCue') ? '' : 's'));
+        return ((remainingSec <= 0 || remainingSec > cueTime) ? '' : remainingSec);
     },
     isPlaying: function() {
     	return pageSession.get('isPlaying');
     },
-    timerClass: function() {
-    	return pageSession.get('isCue') ? "text-danger blink" : "text-success";
-    }
 });
 
 Template.SetsLive.created = function(){
   var self = this;
-  this.remaining = new ReactiveVar(countdownTimers[0].duration);
+  this.remaining = new ReactiveVar(cueTime + 1);
   this.interval = Meteor.setInterval(function() {
-  	if(pageSession.get('isPlaying')) {
+  	if(pageSession.get('hasSetStarted') == false && pageSession.get('isPlaying')) {
 	    var remaining = self.remaining.get();
-	    if(remaining > 0){
-		    self.remaining.set(--remaining);
+	    self.remaining.set(--remaining);
+	    if(remaining > 0 && !isFirstCuePlayed) {
+	    	loadCue(cueItems[cueItemIndex]);
+	    	isFirstCuePlayed = true;
+	    }else if (remaining === 0) {
+			pageSession.set('hasSetStarted', true);
+			popcorn.currentTime(1);
+    		popcorn.play();
+    		if(pageSession.get('setAudio')) {
+	    		audio.play();
+    		}
+    		Meteor.clearInterval(this.interval);
 	    }
-
-	    if (remaining === 0) {
-	    	countdownTimerIndex ++;
-	    	if(remainingTimer = countdownTimers[countdownTimerIndex]) {
-	    		self.remaining.set(remainingTimer.duration);
-	    		if(countdownTimerIndex == 1) {
-	    			pageSession.set('hasSetStarted', true);
-	    			popcorn.currentTime(1);
-		    		popcorn.play();
-		    		if(pageSession.get('setAudio')) {
-			    		audio.play();
-		    		}
-	    		}
-	    		isCuePlayed = false;
-	    		pageSession.set('isCue', remainingTimer.isCue);
-	    	}else {
-			    Meteor.clearInterval(this.interval);
-	    	}
-	    }
-    }
-    if(pageSession.get('isCue') && !isCuePlayed) {
-    	loadCue(countdownTimers[countdownTimerIndex], parseInt(countdownTimerIndex/2));
     }
   }, 1000);
 };
@@ -128,15 +116,14 @@ Template.SetsLive.onDestroyed(function () {
     Meteor.clearInterval(this.interval);
     popcorn = null;
     cuePopcorn = [];
-	countdownTimers = [{isCue: true, duration: cueTime}];
-	countdownTimerIndex = 0;
+	cueItems = [];
+	cueItemIndex = 0;
 	allowanceTime = 0.1;
 	init = true;
+	isFirstCuePlayed = false;
 	audio = null;
-	isCuePlayed = false;
 	cueContext.close();
 	setContext.close();
-	queueAudioSource = [];
 	pageSession.set('isPlaying', false);
 	pageSession.set('isCue', false);
 	$('#audio-item').find('audio').remove();
@@ -174,45 +161,26 @@ setPageSession = function(key, value) {
 	pageSession.set(key, value);
 };
 
-handleAudio = function(hasSetStarted, isPlaying) {
-	if(isPlaying) {
-		popcorn.pause();
-	} else {
-		if(hasSetStarted) {
-			popcorn.play();
-		}
-	}
-	pageSession.set('isPlaying', !isPlaying);
-};
-
-loadCue = function(obj, index) {
-	if(obj.isCue && obj.exerciseId) {
-		if(song = Songs.findOne({exerciseId: obj.exerciseId})) {
+loadCue = function(cueObj) {
+	if(cueObj && cueObj.hasOwnProperty('exerciseId'))
+	{
+		if(song = Songs.findOne({exerciseId: cueObj.exerciseId})) {
 			var aud = new Audio(song.url());
 			aud.play();
-		}else if(obj.default_cue) {
-			if(obj.default_cue.indexOf(Meteor.absoluteUrl()) > -1) {
-				obj.default_cue = obj.default_cue.replace(Meteor.absoluteUrl(), '/');
+		}else if(cueObj.default_cue) {
+			if(cueObj.default_cue.indexOf(Meteor.absoluteUrl()) > -1) {
+				cueObj.default_cue = cueObj.default_cue.replace(Meteor.absoluteUrl(), '/');
 			}
-			playCueSound(obj.default_cue);
+			playCueSound(cueObj.default_cue);
 		}
 	}
-	isCuePlayed = true;
 }
 
-setCue = function(countdowns, setExercises) {
-	var indxs = 0;
-	_.each(countdowns, function(obj, index) {
-		if(obj.isCue && indxs < setExercises.length) {
-			exerciseId = setExercises[indxs].exerciseId;
-			countdownTimers[index].exerciseId = exerciseId;
-			if(exercise = Exercises.findOne(exerciseId)) {
-				countdownTimers[index].default_cue = exercise.default_cue;
-				if(exercise.name.indexOf('Rest') > -1) {
-					countdownTimers[index].duration = 0;
-				}
-			}
-			indxs ++;
+setCue = function(setExercises) {
+	_.each(setExercises, function(exercise, index) {
+		cueItems.push(exercise);
+		if(exerciseCue = Exercises.findOne(exercise.exerciseId)) {
+			cueItems[index].default_cue = exerciseCue.default_cue;
 		}
 	});
 };
@@ -299,18 +267,18 @@ createAudioElement = function(){
 	  this.classList.toggle('playing');
 	  if (this.classList.contains('playing')) {
 	    // drawPauseButton(STROKE_AND_FILL);
+	    pageSession.set('isPlaying', true);
 	    if(pageSession.get('setAudio'))
 	    {
 		    audio.play();
 		    if(init) audio.pause();
 		}
-		pageSession.set('isCue', true);
 	    init = false;
-	    handleAudio(pageSession.get('hasSetStarted'), pageSession.get('isPlaying'));
+	   
 	  } else {
 	    drawPlayButton(STROKE_AND_FILL);
+	    pageSession.set('isPlaying', false);
 	    audio.pause();
-	    handleAudio(pageSession.get('hasSetStarted'), pageSession.get('isPlaying'));
 	  }
 	}, true);
 
@@ -336,7 +304,6 @@ createAudioElement = function(){
 	const CANVAS_HEIGHT = canvas.height;
 	const CANVAS_WIDTH = canvas.width;
 
-	// window.audio
 	audio = new Audio();
 	audio.src = pageSession.get('setAudio');
 	audio.loop = true;
@@ -386,7 +353,6 @@ playCueSound = function(url) {
   /* --- set up web audio --- */
 
   // use context
-  // context = new AudioContext();
 
   var source = cueContext.createBufferSource();
   source.connect(cueContext.destination);
@@ -399,7 +365,6 @@ playCueSound = function(url) {
   request.onload = function() {
     cueContext.decodeAudioData(request.response, function(response) {
     	source.buffer = response;
-    	// queueAudioSource.push(source);
     	source.start();
     }, function () { console.error('The request failed.'); } );
   }
