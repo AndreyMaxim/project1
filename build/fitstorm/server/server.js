@@ -3,6 +3,7 @@ var verifyEmail = false;
 Accounts.config({ sendVerificationEmail: verifyEmail });
 
 Meteor.startup(function() {
+
 	Meteor.AppCache.config({
 		onlineOnly: ['/fonts/','/images/','/videos/','/packages/']
 	});

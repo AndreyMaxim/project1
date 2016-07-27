@@ -1,4 +1,6 @@
-this.Sets = new Mongo.Collection("sets");
+// this.Sets = new Mongo.Collection("sets");
+// var sets  = new Mongo.Collection("sets");
+this.Sets = new Ground.Collection('sets');
 
 this.Sets.userCanInsert = function(userId, doc) {
 	return true;

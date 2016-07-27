@@ -1,0 +1,1 @@
+this.Users = new Ground.Collection('users');

@@ -1,4 +1,7 @@
-this.SetExercises = new Mongo.Collection("set_exercises");
+// this.SetExercises = new Mongo.Collection("set_exercises");
+
+// var set_exercises = new Mongo.Collection("set_exercises");
+this.SetExercises = new Ground.Collection('set_exercises');
 
 this.SetExercises.userCanInsert = function(userId, doc) {
 	return true;

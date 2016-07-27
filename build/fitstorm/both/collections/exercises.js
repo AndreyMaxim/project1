@@ -1,4 +1,6 @@
-this.Exercises = new Mongo.Collection("exercises");
+// this.Exercises = new Mongo.Collection("exercises");
+// var exercises = new Mongo.Collection("exercises");
+this.Exercises = new Ground.Collection('exercises');
 
 this.Exercises.userCanInsert = function(userId, doc) {
 	return true;
