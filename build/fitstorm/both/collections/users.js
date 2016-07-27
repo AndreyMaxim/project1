@@ -1,1 +1,1 @@
-this.Users = new Ground.Collection('users');
+Ground.Collection(Meteor.users);
