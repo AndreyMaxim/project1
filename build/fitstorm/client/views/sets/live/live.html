@@ -21,19 +21,26 @@
 					<audio preload="auto" id="audio-item"></audio>
 				</div>
 				
-				<!-- Controls -->
-				{{#if isPlaying}}
-					<div class="row">
-						<p class="timer-wrapper text-warning"> 
-							{{ getCountdownTimer }} <!-- countdown timer -->
-						</p>				
-					</div>
-				{{else}}
-					<div>
-						<canvas id="playbutton" width="75" height="75" class=""></canvas>
-					</div>
-				{{/if}}
+				<!-- Controls -->		
+				<div>
+					<button class="btn default backward-btn {{disabledClass}}">
+						<span class="fa fa-backward {{disabledClass}}"></span>
+					</button>
+					<button class="btn default" id="playbutton"><span class="fa fa-{{playBtnClass}}"></span></button>
+					<button class="btn default forward-btn {{disabledClass}}">
+						<span class="fa fa-forward {{disabledClass}}"></span>
+					</button>
+					<!-- <canvas id="playbutton" width="75" height="75" class=""></canvas> -->
+				</div>
 
+				<!-- Countdown Timer -->
+				<div class="row">
+					<p class="timer-wrapper text-warning"> 
+						{{ getCountdownTimer }} <!-- countdown timer -->
+					</p>				
+				</div>
+
+				<!-- Exercise List -->
 				<div class="row set-exercises-wrapper">
 					<!--  Exercise List -->
 					{{#each getSetExercises}}

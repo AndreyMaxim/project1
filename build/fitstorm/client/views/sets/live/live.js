@@ -10,14 +10,17 @@ var pageSession = new ReactiveDict(),
 	setContext = null,
 	restCueTime = 1,
 	audio = null,
+	exerciseList = [],
 	isFirstCuePlayed = false;
 
 Template.SetsLive.rendered = function() {
 	var set_details = this.data.set_details,
 		song = Songs.findOne({ _id: set_details.songId}),
 		setExercises = isTabata(set_details.type) ? setTabataExercises(set_details.set_exercises_joined,set_details._id) : set_details.set_exercises_joined,
-		start = 1;
-	
+		start = 1,
+		self = this;
+
+	this.exerciseIndex = new ReactiveVar(-1);
 	pageSession.set('setAudio', song ? song.url() : null );
 	pageSession.set('setExercises' + set_details._id, setExercises);
 	pageSession.set('set_details', set_details);
@@ -48,23 +51,34 @@ Template.SetsLive.rendered = function() {
 				applyclass: "active-exercise, text-lead"
 			});
 
-		popcorn.cue(endPlayTime - 0.5, function() {
-			$('.active-exercise').fadeOut('slow').delay(1000);
+		// popcorn.cue(endPlayTime - 0.5, function() {
+		// 	$('.active-exercise').fadeOut('slow').delay(1000);
+		// });
+
+		popcorn.cue(playTime - 1, function() {
+			currentExerciseIndex = self.exerciseIndex.get();
+			++ currentExerciseIndex;
+		   	self.exerciseIndex.set(currentExerciseIndex);
 		});
+
+		exerciseList.push({startAt: playTime, cue: obj.exercise});
 		
 		if(nextExercise && (nextExercise.exercise.indexOf('Rest') > -1)) {
 			cuePlayTime = endPlayTime;
 		}
 
-		popcorn.cue(cuePlayTime, function() {
-			++ cueItemIndex;
-			loadCue(cueItems[cueItemIndex]);
+		popcorn.cue(cuePlayTime, function(e) {
+			cueItem = cueItems[cueItemIndex];
+			if(cueItem && this.currentTime() <= cueItem.timeToPlayAudio) {
+				loadCue(cueItem);
+			}
 		});
+		
+		setCue(obj, index, playTime);
 
 		start = start + obj.duration;
 	});
 
-	setCue(setExercises);
 	createAudioElement();
 };
 
@@ -72,7 +86,7 @@ Template.SetsLive.helpers({
 	audioSource : function() {
 		return pageSession.get('setAudio');
 	},
-	getSetExercises : function(){
+	getSetExercises : function() {
 		return pageSession.get('setExercises'+this.set_details._id);
 	},
 	setDetail: function() {
@@ -85,6 +99,15 @@ Template.SetsLive.helpers({
     isPlaying: function() {
     	return pageSession.get('isPlaying');
     },
+    playBtnClass: function() {
+    	return pageSession.get('isPlaying') ? 'pause' : 'play'; 
+    },
+    hasSetStarted: function() {
+    	return pageSession.get('hasSetStarted');
+    },
+    disabledClass: function() {
+    	return pageSession.get('hasSetStarted') ? '' : 'disabled';
+    }
 });
 
 Template.SetsLive.created = function(){
@@ -122,6 +145,7 @@ Template.SetsLive.onDestroyed(function () {
 	init = true;
 	isFirstCuePlayed = false;
 	audio = null;
+	exerciseList = [];
 	cueContext.close();
 	setContext.close();
 	pageSession.set('isPlaying', false);
@@ -132,6 +156,35 @@ Template.SetsLive.onDestroyed(function () {
 Template.SetsLive.events({
 	"click #go-back": function(){
 		history.back();
+	},
+	"click .forward-btn": function(e, t) {
+		if($(e.target).hasClass('disabled')) {
+			return;
+		}
+
+		var currentExerciseIndex = Template.instance().exerciseIndex.get();
+		var exerciseLength = exerciseList.length;
+
+		if(currentExerciseIndex < exerciseLength) {
+			++ cueItemIndex;
+			Template.instance().exerciseIndex.set(++currentExerciseIndex);
+			popcorn.currentTime(exerciseList[currentExerciseIndex].startAt);
+		}
+	},
+	"click .backward-btn": function(e, t) {
+		if($(e.target).hasClass('disabled')){
+			return;
+		}
+
+		var currentExerciseIndex = Template.instance().exerciseIndex.get();
+		var exerciseLength = exerciseList.length;
+
+		if(currentExerciseIndex < exerciseLength && currentExerciseIndex >= 0) {
+			-- currentExerciseIndex;
+			-- cueItemIndex;
+			popcorn.currentTime(exerciseList[currentExerciseIndex].startAt);
+		}
+		Template.instance().exerciseIndex.set(currentExerciseIndex);		
 	}
 });
 
@@ -167,22 +220,27 @@ loadCue = function(cueObj) {
 		if(song = Songs.findOne({exerciseId: cueObj.exerciseId})) {
 			var aud = new Audio(song.url());
 			aud.play();
+			++ cueItemIndex;
 		}else if(cueObj.default_cue) {
 			if(cueObj.default_cue.indexOf(Meteor.absoluteUrl()) > -1) {
 				cueObj.default_cue = cueObj.default_cue.replace(Meteor.absoluteUrl(), '/');
 			}
 			playCueSound(cueObj.default_cue);
+			++ cueItemIndex;
 		}
 	}
 }
 
-setCue = function(setExercises) {
-	_.each(setExercises, function(exercise, index) {
+setCue = function(exercise, index, timeToPlay) {
+	// _.each(setExercises, function(exercise, index) {
+	if(exercise) {
+		exercise.timeToPlayAudio = timeToPlay;
 		cueItems.push(exercise);
 		if(exerciseCue = Exercises.findOne(exercise.exerciseId)) {
 			cueItems[index].default_cue = exerciseCue.default_cue;
 		}
-	});
+	}
+	// });
 };
 
 
@@ -237,31 +295,31 @@ createAudioElement = function(){
 	}
 
 	var canvas = document.getElementById('playbutton');
-	var ctx = canvas.getContext('2d');
-	ctx.lineWidth = 4;
+	// var ctx = canvas.getContext('2d');
+	// ctx.lineWidth = 4;
 
-	var R = canvas.width / 2;
-	var STROKE_AND_FILL = false;
+	// var R = canvas.width / 2;
+	// var STROKE_AND_FILL = false;
 
-	canvas.addEventListener('mouseover', function(e) {
-	  if (this.classList.contains('playing')) {
-	    drawPauseButton(STROKE_AND_FILL);
-	  } else {
-	    drawPlayButton(STROKE_AND_FILL);
-	  }
-	  ctx.save();
-	  ctx.lineWidth += 3;
-	  ctx.circle(R, R, R - ctx.lineWidth + 1);
-	  ctx.restore();
-	}, true);
+	// canvas.addEventListener('mouseover', function(e) {
+	//   if (this.classList.contains('playing')) {
+	//     drawPauseButton(STROKE_AND_FILL);
+	//   } else {
+	//     drawPlayButton(STROKE_AND_FILL);
+	//   }
+	//   ctx.save();
+	//   ctx.lineWidth += 3;
+	//   ctx.circle(R, R, R - ctx.lineWidth + 1);
+	//   ctx.restore();
+	// }, true);
 
-	canvas.addEventListener('mouseout', function(e) {
-	  if (this.classList.contains('playing')) {
-	    drawPauseButton(STROKE_AND_FILL);
-	  } else {
-	    drawPlayButton(STROKE_AND_FILL);
-	  }
-	}, true);
+	// canvas.addEventListener('mouseout', function(e) {
+	//   if (this.classList.contains('playing')) {
+	//     drawPauseButton(STROKE_AND_FILL);
+	//   } else {
+	//     drawPlayButton(STROKE_AND_FILL);
+	//   }
+	// }, true);
 
 	canvas.addEventListener('click', function(e) {
 	  this.classList.toggle('playing');
@@ -276,7 +334,7 @@ createAudioElement = function(){
 	    init = false;
 	   
 	  } else {
-	    drawPlayButton(STROKE_AND_FILL);
+	    // drawPlayButton(STROKE_AND_FILL);
 	    pageSession.set('isPlaying', false);
 	    audio.pause();
 	  }
@@ -297,7 +355,7 @@ createAudioElement = function(){
 	  ctx.line(R+(R/5), R/2, R+(R/5), R*1.5);
 	  ctx.restore();
 	}
-	drawPlayButton(STROKE_AND_FILL);
+	// drawPlayButton(STROKE_AND_FILL);
 
 	window.playButton = canvas;
 	
@@ -326,15 +384,15 @@ createAudioElement = function(){
 	  var freqByteData = new Uint8Array(analyser.frequencyBinCount);
 	  analyser.getByteFrequencyData(freqByteData); //analyser.getByteTimeDomainData(freqByteData);
 
-	  var SPACER_WIDTH = 10;
-	  var BAR_WIDTH = 5;
-	  var OFFSET = 100;
-	  var CUTOFF = 23;
-	  var numBars = Math.round(CANVAS_WIDTH / SPACER_WIDTH);
+	  // var SPACER_WIDTH = 10;
+	  // var BAR_WIDTH = 5;
+	  // var OFFSET = 100;
+	  // var CUTOFF = 23;
+	  // var numBars = Math.round(CANVAS_WIDTH / SPACER_WIDTH);
 
-	  ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-	  ctx.fillStyle = '#F6D565';
-	  ctx.lineCap = 'round';
+	  // ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+	  // ctx.fillStyle = '#F6D565';
+	  // ctx.lineCap = 'round';
 	}
 
 	function onLoad(e) {
