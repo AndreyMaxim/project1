@@ -31,6 +31,7 @@ var privateRoutes = [
 	"sets.details.edit",
 	"sets.edit",
 	"sets.live",
+	"sets.end",
 	"exercises",
 	"exercises.insert",
 	"exercises.edit",
@@ -216,6 +217,8 @@ Router.map(function () {
 	this.route("sets.details.edit", {path: "/sets/details/:setId/edit/:itemId", controller: "SetsDetailsEditController"});
 	this.route("sets.edit", {path: "/sets/edit/:setId", controller: "SetsEditController"});
 	this.route("sets.live", {path: "/sets/live/:setId", controller: "SetsLiveController"});
+	this.route("sets.end", {path: "/sets/end/:setId", controller: "EndSetController"});
+
 	this.route("user_settings", {path: "/user_settings", controller: "UserSettingsController"});
 	this.route("user_settings.profile", {path: "/user_settings/profile", controller: "UserSettingsProfileController"});
 	this.route("user_settings.change_pass", {path: "/user_settings/change_pass", controller: "UserSettingsChangePassController"});
