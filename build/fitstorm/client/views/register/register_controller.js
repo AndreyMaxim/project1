@@ -19,6 +19,10 @@ this.RegisterController = RouteController.extend({
 		
 
 		var subs = [
+			Meteor.subscribe("exercises"),
+			Meteor.subscribe("sets_empty"),
+			Meteor.subscribe("exercises_empty"),
+			Meteor.subscribe("song_list")
 		];
 		var ready = true;
 		_.each(subs, function(sub) {

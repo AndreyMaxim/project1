@@ -11,15 +11,23 @@
 				{{> SetsDetailsDetailsForm}}
 				<div class="form-horizontal">
 					<h5>
-						{{#if set_details.preview_count}}
+						{{#if set_details.isDefault}}
 							<a href="#" class="execute-set-btn text-lead">
-								Preview Live page
-							</a>
-						{{else}}
-							<a href="#" class="buy-set-btn text-lead">
-								Buy
+								Smash it!
 							</a>
 						{{/if}}
+
+						{{#unless set_details.isDefault}}
+							{{#if set_details.preview_count}}
+								<a href="#" class="execute-set-btn text-lead">
+									Preview Live page
+								</a>
+							{{else}}
+								<a href="#" class="buy-set-btn text-lead">
+									Buy
+								</a>
+							{{/if}}
+						{{/unless}}
 					</h5>
 				</div>
 			</div>

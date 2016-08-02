@@ -64,6 +64,7 @@ Template.Register.events({
 			{
 				pageSession.set("errorMessage", "");
 				pageSession.set("verificationEmailSent", true);
+				saveFreeSets();
 			}
 		});
 		return false;
@@ -84,3 +85,40 @@ Template.Register.helpers({
 	}
 	
 });
+
+saveFreeSets = function() {
+		var songUrl = Meteor.absoluteUrl() + "songs/free-song-1.mp3";
+		set_one_id = Sets.insert({setName: 'free set one', type: 'Interval', songUrl: songUrl, isDefault: true});
+		set_one_exercises = [
+			{exercise: "Silent"},
+			{exercise: "Push ups"},
+			{exercise: "Mountain climbers"},
+			{exercise: "Push ups"},
+			{exercise: "Mountain climbers"},
+			{exercise: "Push ups"},
+			{exercise: "Mountain climbers"},
+			{exercise: "Rest"},
+			{exercise: "Iron cross"},
+			{exercise: "Leg raises"},
+			{exercise: "Iron cross"},
+			{exercise: "Leg raises"},
+			{exercise: "Iron cross"},
+			{exercise: "Leg raises"},
+			{exercise: "Rest"},
+			{exercise: "Squats"},
+			{exercise: "Burpees"},
+			{exercise: "Squats"},
+			{exercise: "Burpees"},
+			{exercise: "Squats"},
+			{exercise: "Burpees"},
+			{exercise: "Rest"}
+		];
+		set_one_exercises.forEach(function(obj) {
+			e = Exercises.findOne({name: obj.exercise});
+			obj.duration = 10;
+			obj.ownerId  = Meteor.userId();
+			obj.setId    = set_one_id;
+			obj.exerciseId = e._id;
+			SetExercises.insert(obj);
+		});
+}

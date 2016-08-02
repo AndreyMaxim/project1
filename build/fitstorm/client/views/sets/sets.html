@@ -107,12 +107,16 @@
 			{{songId}}
 		</td>
 		<td class="td-icon">
-			<span id="edit-button" class="fa fa-pencil {{editButtonClass}}" title="Edit">
-			</span>
+			{{#unless isDefault}}
+				<span id="edit-button" class="fa fa-pencil {{editButtonClass}}" title="Edit">
+				</span>
+			{{/unless }}
 		</td>
 		<td class="td-icon">
-			<span id="delete-button" class="fa fa-trash-o {{deleteButtonClass}}" title="Delete">
-			</span>
+			{{#unless isDefault}}
+				<span id="delete-button" class="fa fa-trash-o {{deleteButtonClass}}" title="Delete">
+				</span>
+			{{/unless }}
 		</td>
 	</tr>
 </template>

@@ -21,7 +21,7 @@ Template.SetsLive.rendered = function() {
 		self = this;
 
 	this.exerciseIndex = new ReactiveVar(-1);
-	pageSession.set('setAudio', song ? song.url() : null );
+	pageSession.set('setAudio', getSetSong(set_details) );
 	pageSession.set('setExercises' + set_details._id, setExercises);
 	pageSession.set('set_details', set_details);
 	pageSession.set('hasSetStarted', false);
@@ -334,4 +334,12 @@ playCueSound = function(url) {
 
 setEnded = function() {
 	Router.go('sets.end', { setId: Router.current().params.setId });
+}
+
+getSetSong = function(set)
+{
+	if(set.songUrl) {
+		return set.songUrl;
+	}
+	return (song ? song.url() : null);
 }
