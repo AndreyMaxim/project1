@@ -121,4 +121,71 @@ saveFreeSets = function() {
 			obj.exerciseId = e._id;
 			SetExercises.insert(obj);
 		});
+	set_two_id = Sets.insert({setName: 'Set 1 Copy', type: 'Interval', songUrl: songUrl, isDefault: true});
+	set_two_exercises = [
+		{exercise: "Silent"},
+		{exercise: "Push ups"},
+		{exercise: "Mountain climbers"},
+		{exercise: "Push ups"},
+		{exercise: "Mountain climbers"},
+		{exercise: "Push ups"},
+		{exercise: "Mountain climbers"},
+		{exercise: "Rest"},
+		{exercise: "Iron cross"},
+		{exercise: "Leg raises"},
+		{exercise: "Iron cross"},
+		{exercise: "Leg raises"},
+		{exercise: "Iron cross"},
+		{exercise: "Leg raises"},
+		{exercise: "Rest"},
+		{exercise: "Squats"},
+		{exercise: "Burpees"},
+		{exercise: "Squats"},
+		{exercise: "Burpees"},
+		{exercise: "Squats"},
+		{exercise: "Burpees"},
+		{exercise: "Rest"}
+	];
+	set_two_exercises.forEach(function(obj) {
+		e = Exercises.findOne({name: obj.exercise});
+		obj.duration = 10;
+		obj.ownerId  = Meteor.userId();
+		obj.setId    = set_two_id;
+		obj.exerciseId = e._id;
+		SetExercises.insert(obj);
+	});
+	set_3_id = Sets.insert({setName: 'Set 1 Copy2', type: 'Interval', songUrl: songUrl, isDefault: true});
+	set_3_exercises = [
+		{exercise: "Silent"},
+		{exercise: "Push ups"},
+		{exercise: "Mountain climbers"},
+		{exercise: "Push ups"},
+		{exercise: "Mountain climbers"},
+		{exercise: "Push ups"},
+		{exercise: "Mountain climbers"},
+		{exercise: "Rest"},
+		{exercise: "Iron cross"},
+		{exercise: "Leg raises"},
+		{exercise: "Iron cross"},
+		{exercise: "Leg raises"},
+		{exercise: "Iron cross"},
+		{exercise: "Leg raises"},
+		{exercise: "Rest"},
+		{exercise: "Squats"},
+		{exercise: "Burpees"},
+		{exercise: "Squats"},
+		{exercise: "Burpees"},
+		{exercise: "Squats"},
+		{exercise: "Burpees"},
+		{exercise: "Rest"}
+	];
+	set_3_exercises.forEach(function(obj) {
+		e = Exercises.findOne({name: obj.exercise});
+		obj.duration = 10;
+		obj.ownerId  = Meteor.userId();
+		obj.setId    = set_3_id;
+		obj.exerciseId = e._id;
+		SetExercises.insert(obj);
+	});
+
 }
