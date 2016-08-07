@@ -170,8 +170,11 @@ Template.SetsLive.events({
 		if(currentExerciseIndex < exerciseLength) {
 			++ cueItemIndex;
 			Template.instance().exerciseIndex.set(++currentExerciseIndex);
-			if(exerciseList[currentExerciseIndex])
-				popcorn.currentTime(exerciseList[currentExerciseIndex].startAt);
+			if(exerciseList[currentExerciseIndex]) {
+				skipTo = exerciseList[currentExerciseIndex].startAt;
+				popcorn.currentTime(skipTo);
+				audio.currentTime = skipTo;
+			}
 		}
 	},
 	"click .backward-btn": function(e, t) {
@@ -185,8 +188,11 @@ Template.SetsLive.events({
 		if(currentExerciseIndex < exerciseLength && currentExerciseIndex >= 0) {
 			-- currentExerciseIndex;
 			-- cueItemIndex;
-			if(exerciseList[currentExerciseIndex])
-				popcorn.currentTime(exerciseList[currentExerciseIndex].startAt);
+			if(exerciseList[currentExerciseIndex]) {
+				skipTo = exerciseList[currentExerciseIndex].startAt;
+				popcorn.currentTime(skipTo);
+				audio.currentTime = skipTo;
+			}
 		}
 		Template.instance().exerciseIndex.set(currentExerciseIndex);		
 	}
