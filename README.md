@@ -10,6 +10,8 @@ localhost:3000
 
 To build to production:
 
+this is a test file
+
 ```bash
 npm install -g mupx
 meteor-kitchen fitstorm.yaml ./build/fitstorm
