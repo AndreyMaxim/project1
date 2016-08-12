@@ -1,148 +1,95 @@
-#radio .topbar {
-    background-color: #f9f9f9;
-    margin-top: 50px;
-    padding: 10px 5px 1px 10px;
-    text-align: center;
+.sticky-wrapper{
+    background-color: #000000;
+    
 }
-#radio .topbar ul li span {
-    text-transfrom: uppercase;
+
+.recent{
+    height: 40px !important;
+    padding: 4px !important;
 }
-#radio .topbar ul li button {
-    text-align: center;
-    background-color: #fff;
-    box-shadow: 1px 2px 3px #444;
-    color: #224099;
-    font-weight: 800;
-    border-radius: 40px;
-    padding: 10px 30px;
+
+.list-div{
+    margin-bottom: 0px;
+    border-bottom: 3px solid #5a5a5a;
+    border-width: thin;
 }
-#radio .topbar ul li .ult {
-    background-color: #999;
-    color: #fff;
+
+.home-list > li {
+    padding-left: 5px;
+    padding-right: 5px;
 }
-#radio .topbar ul li i {
-    font-size: 26px;
-    padding-right: 50px;
-}
+
+.home-list{
+    list-style-type: disc;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 1px;
+    -webkit-margin-end: 1px;
+    -webkit-padding-start: 0px;
+    padding-bottom: 1em;    
+    
+ }
+
+ .list-title{
+     font-family: Arial, Helvetica, sans-serif;
+     font-size: 20px;
+     color: #ff9e45;
+     padding-left: 1em !important;
+ }
+
+.list-duration{
+     font-family: Arial, Helvetica, sans-serif;
+     font-size: 16px;
+     color: #fff;
+     text-align: right;
+     padding-left: 1em !important;
+ }
+
+ .list-btn{
+     align-content: flex-start;
+     padding-right: 1em !important;
+ }
+
+ .panel-collapse{
+     background-color: #353535;
+     color: #fff;
+     padding-left: 0em;
+     float: left;
+     width: 100%;
+     padding-left: 5em;
+ }
+
+ h6{
+     color: #fff;
+ }
+
 #radio .recent {
-    background-color: #eee;
+    background-color: #dadada;
     text-align: center;
     margin-top: 0px;
     border-bottom: 1px solid #999;
     height: 60px;
+    padding: 1em;
 }
-#radio .recent ul {
-    margin-bottom: 0;
-}
-#radio .recent button {
-    text-align: center;
-    background-color: #224099;
-    color: #fff;
-    font-weight: 200;
-    border-radius: 40px;
-    padding: 5px 30px;
-}
-#radio .recent p {
-    font-size: 26px;
-    padding-top: 5px;
-}
-#radio .creat,
-#radio .shafl {
-    height: 60px;
-    background-color: #eee;
-    margin-top: 0;
-    padding-top: 0;
-}
-#radio .creat .icon,
-#radio .shafl .icon {
-    margin-top: 10px;
-    margin-left: 10px;
-    display: inline-block;
-    heighr: 40px;
-    width: 40px;
-    background-color: #224099;
-    border-radius: 50%;
-    line-height: 40px;
-    text-align: center;
-    color: #fff;
-    font-size: 20px;
-}
-#radio .creat span,
-#radio .shafl span {
-    font-size: 24px;
-    margin-left: 20px;
-}
-#radio .shafl {
-    border-top: 1px solid #999;
-}
-#radio .shafl .icon {
-    background-color: #6080dc;
-}
-#radio .shafl span {
-    font-size: 20px;
-    margin-left: 20px;
-}
-#radio .songs {
-    background-color: #224099;
-}
-#radio .songs ul {
-    margin-bottom: 0;
-}
-#radio .songs ul li .img img {
-    height: 60px;
-    width: 60px;
-    float: left;
-    margin-top: 8px;
-    margin-left: 10px;
-}
-#radio .songs ul li .img span {
-    display: inline-block;
-    margin-left: 20px;
-}
-#radio .songs ul li .img span .tack-mame p {
-    font-weight: 600;
-    margin-top: 17px;
-    color: #fff;
-}
-.button {
-    float: right;
-    margin-right:10px;
 
+.col-xs-6{
+    padding: 0px;
 }
-.songspuse {
-    background-color: #eee;
-    margin-top: 0;
-    border-top: 1px solid #999;
-    cursor: pointer;
+
+.div-voice{
+    width: 150px;
+    margin: 2em auto;
 }
-.songspuse ul {
-    margin-bottom: 0;
-}
-.songspuse ul li .img img {
-    height: 60px;
-    width: 60px;
-    float: left;
-    margin-top: 8px;
-    margin-left: 10px;
-}
-.songspuse ul li .img span {
-    display: inline-block;
-    margin-left: 20px;
-}
-.songspuse ul li .img span .tack-mame {
-    width: 100%;
-}
-.songspuse ul li .img span .tack-mame p {
-    font-weight: 600;
-    margin-top: 17px;
-    color: #1a1a1a;
-}
-.songspuse:hover {
-    background-color: #224099;
-    -webkit-transition: 0.3s all;
-    transition: 0.3s all;
-}
-.songspuse:hover ul li span .tack-mame p,
-.songspuse:hover ul li span .tack-mame h6{
+
+.voice-text{
     color: #fff;
+    font-size: 14px;
+}
+
+@media only screen and (max-width : 375px) {
+
+    .col-xs-6{
+        width: 100%;
+    }          
+
 }
