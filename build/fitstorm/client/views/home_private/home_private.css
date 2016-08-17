@@ -64,7 +64,7 @@
      color: #fff;
      float: left;
      width: 100%;
-     padding-left: 5em;
+     padding-left: 2em;
  }
 
  h6{
@@ -147,12 +147,41 @@
 }
 
 
-.col-xs-4{
-    padding: 0.2em;
-}
+
+/*static-list*/
 
 .list-block{
     font-size: 20px;
+}
+
+.col-xs-8{
+    font-size: 0.8em;
+}
+
+.col-xs-4{
+    padding: 0.5em;
+}
+
+.list-dev-txt{
+    font-size: 1.5em !important;
+    padding: 2em;
+}
+
+.fa-stack {
+    position: relative;
+    display: inline-block;
+    width: 1em !important;
+    height: 1em !important;
+    line-height: 1em !important;
+    vertical-align: middle;
+}
+
+.list-dur{
+    padding: 1em;
+}
+
+.list-item{
+    padding: 1em;
 }
 
 
