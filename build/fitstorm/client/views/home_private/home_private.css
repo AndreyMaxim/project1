@@ -147,6 +147,14 @@
 }
 
 
+.col-xs-4{
+    padding: 0.5em;
+}
+
+.list-block{
+    font-size: 20px;
+}
+
 /* responsive */
 @media only screen and (max-width : 460px) {
     

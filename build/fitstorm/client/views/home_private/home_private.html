@@ -16,118 +16,149 @@
             <a href="/sets?type=Tabata" class="btn btn-block btn-primary">Tabata</a>
             <a href="/sets?type=Interval" class="btn btn-block btn-primary">Custom Interval</a>
         </div> -->
-        <section id="radio">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="recent">
-                        <button class="btn btn-lg up"><span>recent (a-z)</span></button>
-                        <!--span class="txt-az">A-Z</span-->
-                    </div>
-                    {{#each this.set_list}}
-                        <div data-toggle="collapse" class="underline" href="#{{_id}}">
-                            <div class="list-div">
-                                 <!--ul class="home-list"-->   
-                                    
-                                            <!-- <img src="img/song1.jpg" /> -->
-                                    
-                                        <!--li-->
-			                                    <div class="col-xs-6 list-title">
-			                                        {{ setName }}
-                                                   
-                                                </div>
-                                                <div class="dur-btn">
-                                                    <!--div class="col-xs-6 list-duration">{{setDuration}} secs</div-->
-                                                    <div class="list-btn">
-                                                        {{#if isDefault}}
-                                                                <button class="btn btn-col fix-width set-execution-btn pull-right btn-primary text-primary"> Smash it!</button>
-                                                            {{/if}}
-                                                            {{#unless isDefault}}
-                                                                {{#if hasPreviewCredits }}
-                                                                    <button class="btn fix-width set-execution-btn pull-right btn-info text-primary"> Preview ({{ preview_count }}) </button>
-                                                                {{else}}
-                                                                    <button class="btn fix-width set-execution-btn pull-right btn-success text-primary"> Buy </button>
-                                                                {{/if}}
-                                                            {{/unless}}
-                                                    </div>
-                                                    <div class="txt-dur">{{setDuration}} secs</div>
-                                                </div>
-                                        <!--/li-->
-                                                                        
-                                <!--/ul-->
+    <section id="radio">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="recent">
+                    <button class="btn btn-lg up"><span>recent (a-z)</span></button>
+                    <!--span class="txt-az">A-Z</span-->
+                </div>
+                {{#each this.set_list}}
+                <div data-toggle="collapse" class="underline" href="#{{_id}}">
+                    <div class="list-div">
+                        <!--ul class="home-list"-->
+
+                        <!-- <img src="img/song1.jpg" /> -->
+
+                        <!--li-->
+
+                        <div class="col-xs-6 list-title">
+                            {{ setName }}
+
+                        </div>
+                        <div class="dur-btn">
+                            <!--div class="col-xs-6 list-duration">{{setDuration}} secs</div-->
+                            <div class="list-btn">
+                                {{#if isDefault}}
+                                <button class="btn btn-col fix-width set-execution-btn pull-right btn-primary text-primary"> Smash it!</button>                                {{/if}} {{#unless isDefault}} {{#if hasPreviewCredits }}
+                                <button class="btn fix-width set-execution-btn pull-right btn-info text-primary"> Preview ({{ preview_count }}) </button>                                {{else}}
+                                <button class="btn fix-width set-execution-btn pull-right btn-success text-primary"> Buy </button>                                {{/if}} {{/unless}}
                             </div>
-                            <div id="{{_id}}" class="panel-collapse collapse">
+                            <div class="txt-dur">{{setDuration}} secs</div>
+                        </div>
+                        <!--/li-->
+
+                        <!--/ul-->
+                    </div>
+                    <div id="{{_id}}" class="panel-collapse collapse">
+
+                        <p> Exercises: </p>
+                        <!--ul class="no-style"-->
+                        <div class="list-block">
+                            
+                            <div class="col-xs-4 col-xs-offset-4">10s</div>
+                            <div class="col-xs-4">Silent</div>
+                            
+                            <div class="col-xs-4">
+                                <div class="stacked-icons pull-right">
+                                    <span class="fa-stack fa-2x">
+                                        <i class="fa fa-refresh fa-stack-1x"></i>
+                                        <span class="fa-stack-1x" style="font-size:12px; color:white;">3</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">10s</div>
+                            <div class="col-xs-4">Push-ups</div>
+                            
+                            <div class="col-xs-4">10s</div>
+                            <div class="col-xs-4">Mountain Climbers</div>
+                            
+                            <div class="col-xs-4 col-xs-offset-4">10s</div>
+                            <div class="col-xs-4">Rest</div>
+                            
+                            <div class="col-xs-4">
+                                <div class="stacked-icons pull-right">
+                                    <span class="fa-stack fa-2x">
+                                        <i class="fa fa-refresh fa-stack-1x"></i>
+                                        <span class="fa-stack-1x" style="font-size:12px; color:white;">3</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">10s</div>
+                            <div class="col-xs-4">Iron Cross</div>
                                 
-                                <p> Exercises: </p>
-                                <ul class="no-style">
-                                    {{#each set_exercises_joined}}
+                            <div class="col-xs-4">10s</div>
+                            <div class="col-xs-4">Leg Raises</div>
+                                
+                            <div class="col-xs-4 col-xs-offset-4">10s</div>
+                            <div class="col-xs-4">Rest</div>
+                            </div>
+                            <!--{{#each set_exercises_joined}}
                                         <div class="col-xs-6">
                                             {{exercise}} 
                                         </div>
                                         <div class="col-xs-6">({{ duration }} secs)</div>
-                                    {{/each}}
-                                </ul>
-                            </div>
+                                    {{/each}}-->
+                            <!--/ul-->
                         </div>
-                        
-
-
+                    </div>
                     {{/each}}
                 </div>
             </div>
-        </section>
-        <div class="radio">
-            <div class="div-voice">
-                <label class="voice-text"> Voice: </label>
-                <!-- <span> {{getVoiceOption}} </span> -->
-                <button class="btn btn-success btn-xs voice-option-btn"> {{getVoiceOption}} </button>
+    </section>
+    <div class="radio">
+        <div class="div-voice">
+            <label class="voice-text"> Voice: </label>
+            <!-- <span> {{getVoiceOption}} </span> -->
+            <button class="btn btn-success btn-xs voice-option-btn"> {{getVoiceOption}} </button>
 
-                <!-- set up dive modal to start hidden and fade in and out -->
-                <div id="voice-option-modal" class="modal fade">
-                    {{> VoiceOptionModal }}
-                </div>
+            <!-- set up dive modal to start hidden and fade in and out -->
+            <div id="voice-option-modal" class="modal fade">
+                {{> VoiceOptionModal }}
             </div>
-
         </div>
+
+    </div>
 </template>
 
 <template name="VoiceOptionModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                
-                    <div class="modal-txtbtn">
-                        <div class="modal-txt"> English </div>
-                        <div  class="modal-btn"> <button class="btn btn-primary btn-xs"> Choose </button> </div>
+
+                <div class="modal-txtbtn">
+                    <div class="modal-txt"> English </div>
+                    <div class="modal-btn"> <button class="btn btn-primary btn-xs"> Choose </button> </div>
+                </div>
+                <div class="modal-txtbtn">
+                    <div class="modal-txt"> Batman </div>
+                    <div class="modal-btn">
+                        <button class="btn btn-primary btn-xs"> Preview </button>
+                        <button class="btn btn-success btn-xs"> Purchase </button>
                     </div>
-                    <div class="modal-txtbtn">
-                        <div class="modal-txt"> Batman </div>
-                        <div class="modal-btn">
-                            <button class="btn btn-primary btn-xs"> Preview </button>
-                            <button class="btn btn-success btn-xs"> Purchase </button>
-                        </div>
+                </div>
+                <div class="modal-txtbtn">
+                    <div class="modal-txt"> Drill Insdivuctor </div>
+                    <div class="modal-btn">
+                        <button class="btn btn-primary btn-xs"> Preview </button>
+                        <button class="btn btn-success btn-xs"> Purchase </button>
                     </div>
-                    <div class="modal-txtbtn">
-                        <div class="modal-txt"> Drill Insdivuctor </div>
-                        <div class="modal-btn">
-                            <button class="btn btn-primary btn-xs"> Preview </button>
-                            <button class="btn btn-success btn-xs"> Purchase </button>
-                        </div>
+                </div>
+                <div class="modal-txtbtn">
+                    <div class="modal-txt"> Woman </div>
+                    <div class="modal-btn">
+                        <button class="btn btn-primary btn-xs"> Preview </button>
+                        <button class="btn btn-success btn-xs"> Purchase </button>
                     </div>
-                    <div class="modal-txtbtn">
-                        <div class="modal-txt"> Woman </div>
-                        <div class="modal-btn">
-                            <button class="btn btn-primary btn-xs"> Preview </button>
-                            <button class="btn btn-success btn-xs"> Purchase </button>
-                        </div>
+                </div>
+                <div class="modal-txtbtn">
+                    <div class="modal-txt"> Sexy Woman</div>
+                    <div class="modal-btn">
+                        <button class="btn btn-primary btn-xs"> Preview </button>
+                        <button class="btn btn-success btn-xs"> Purchase </button>
                     </div>
-                    <div class="modal-txtbtn">
-                        <div class="modal-txt"> Sexy Woman</div>
-                        <div class="modal-btn">
-                            <button class="btn btn-primary btn-xs"> Preview </button>
-                            <button class="btn btn-success btn-xs"> Purchase </button>
-                        </div>
-                    </div>
-                
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default done">Done</button>
