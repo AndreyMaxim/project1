@@ -155,11 +155,17 @@
 }
 
 .col-xs-8{
-    font-size: 0.8em;
+    font-size: 1em;
+    padding-left: 0em;
 }
 
 .col-xs-4{
-    padding: 0.5em;
+    padding: 0em;
+}
+
+.col-xs-2{
+    padding-left: 20px;
+    padding-right: 0px;
 }
 
 .list-dev-txt{
@@ -171,17 +177,43 @@
     position: relative;
     display: inline-block;
     width: 1em !important;
-    height: 1em !important;
-    line-height: 1em !important;
+    height: 1.8em !important;
+    line-height: 1.8em !important;
     vertical-align: middle;
 }
 
 .list-dur{
-    padding: 1em;
+    padding-left: 0.5em;
 }
 
 .list-item{
-    padding: 1em;
+    padding-left: 1em;
+}
+
+.bracket-second{
+    font-size: 2em;
+    padding-left: 0.2em;
+}
+
+.bracket-first{
+    font-size: 5em;
+    height: 2.1em;
+}
+
+.img-first{
+    padding-top: 0.1em;
+    height: 2.1em;
+    width: 0.3em;
+}
+
+.img-second{
+    height: 1.5em;
+    width: 0.5em;
+    padding-bottom: 0.1em;
+}
+
+.repeat-align{
+    margin-top: 3em;
 }
 
 
@@ -207,9 +239,6 @@
         float: right;
     }
 
-    .panel-collapse{
-        padding-left: 2em;
-    }
 }
 
 @media only screen and (max-width : 278px) {
@@ -242,4 +271,29 @@
     .modal-txtbtn{
         display: block !important;
     }
+}
+
+@media only screen and (max-width : 580px) {
+    
+    .col-xs-2{
+        padding-left: 0em;
+        padding-right: 0em;
+    }
+
+    .panel-collapse{
+        padding-left: 0.5em;
+    }
+
+    .col-xs-8{
+        padding-right: 0em;
+    }
+
+    .list-dur{
+        padding-left: 0em;
+    }
+
+    .list-item{
+        padding-left: 0.5em;
+    }
+
 }
