@@ -163,14 +163,14 @@
     padding: 0em;
 }
 
-.col-xs-2{
-    padding-left: 20px;
+.col-xs-3, .col-xs-9, .col-xs-2, .col-xs-10{
+    padding-left: 0px;
     padding-right: 0px;
 }
 
 .list-dev-txt{
     font-size: 1.5em !important;
-    padding: 2em;
+    padding-left: 2em;
 }
 
 .fa-stack {
@@ -209,11 +209,21 @@
 .img-second{
     height: 1.5em;
     width: 0.5em;
-    padding-bottom: 0.1em;
 }
 
-.repeat-align{
+.repeat-align-first{
     margin-top: 3em;
+    margin-right: 0.5em;
+    float: right;
+}
+
+.repeat-align-second{
+    margin-right: 0.5em;
+    float: right;
+}
+
+.ex-list{
+    padding-top: 1px;
 }
 
 
@@ -273,19 +283,15 @@
     }
 }
 
-@media only screen and (max-width : 580px) {
+@media only screen and (max-width : 665px) {
     
-    .col-xs-2{
-        padding-left: 0em;
-        padding-right: 0em;
-    }
-
     .panel-collapse{
         padding-left: 0.5em;
     }
 
-    .col-xs-8{
-        padding-right: 0em;
+    .repeat-align-second{
+        margin-right: 0em;
+        float: right;
     }
 
     .list-dur{
@@ -294,6 +300,38 @@
 
     .list-item{
         padding-left: 0.5em;
+    }
+
+    .col-xs-2{
+        width: 20%;
+    }
+
+    .col-xs-10{
+        width: 80%;
+    }
+
+}
+
+@media only screen and (max-width : 474px) {
+    
+    .col-xs-2{
+        width: 25%;
+    }
+
+    .col-xs-10{
+        width: 75%;
+    }
+
+}
+
+@media only screen and (min-width : 1080px) {
+    
+    .col-xs-2{
+        width: 10%;
+    }
+
+    .col-xs-10{
+        width: 90%;
     }
 
 }
